@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; padding: 5rem 1.5rem; text-align: center;">
+  <div class="card" style="padding: 3rem 2rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+    <h1 style="font-size: 2.75rem; margin-bottom: 0.5rem; color: var(--text-heading-dark); font-weight: 850;">404</h1>
+    <h2 style="font-size: 1.4rem; color: var(--color-primary-navy); font-weight: 800; margin-bottom: 1rem;">Page Not Found</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">
+      The opportunity, profile, or campus resource you were looking for does not exist or has been moved.
+    </p>
+    <div style="display: flex; gap: 0.75rem; justify-content: center;">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Return to Home</a>
+      <a href="{{ url_for('jobs') }}" class="btn btn-outline">Explore Jobs</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

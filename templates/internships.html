@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Internship Portal - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-success">Internship Portal</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🎓 Paid Campus &amp; Industry Internships</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Gain industry experience, work on production codebases, and earn stipends. Transparent skill matching included.
+      </p>
+    </div>
+
+    {% if current_user and (current_user.role == 'employer' or current_user.role == 'admin') %}
+      <a href="{{ url_for('create_internship') }}" class="btn btn-secondary btn-sm">+ Post New Internship</a>
+    {% endif %}
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <form method="GET" action="{{ url_for('internships') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search internships (Python, Web, AI)..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 180px;">
+      <select name="duration" class="form-control">
+        <option value="">Any Duration</option>
+        <option value="1 Month" {% if selected_duration == '1 Month' %}selected{% endif %}>1 Month</option>
+        <option value="2 Months" {% if selected_duration == '2 Months' %}selected{% endif %}>2 Months</option>
+        <option value="3 Months" {% if selected_duration == '3 Months' %}selected{% endif %}>3 Months</option>
+        <option value="6 Months" {% if selected_duration == '6 Months' %}selected{% endif %}>6 Months</option>
+      </select>
+    </div>
+
+    <div style="min-width: 180px;">
+      <input type="text" name="location" class="form-control" placeholder="Location or Remote..." value="{{ selected_location }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_duration or selected_location %}
+      <a href="{{ url_for('internships') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Internship Cards Grid -->
+  {% if internships %}
+    <div class="grid-2">
+      {% for it in internships %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #38bdf8;">
+          <div>
+            <div class="card-header">
+              <div>
+                <span class="badge badge-info">{{ it.duration }}</span>
+                <h3 style="font-size: 1.25rem; margin-top: 0.4rem;">
+                  <a href="{{ url_for('internship_details', internship_id=it.id) }}" class="card-title-link">{{ it.title }}</a>
+                </h3>
+                <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem;">🏢 {{ it.company_name }}</p>
+              </div>
+
+              <div style="text-align: right;">
+                <span class="badge badge-success">{{ it.stipend }}</span>
+                {% if it.compat_score is not none %}
+                  <div style="margin-top: 6px;">
+                    <span class="badge {% if it.compat_score >= 70 %}badge-success{% elif it.compat_score >= 40 %}badge-warning{% else %}badge-neutral{% endif %}" title="Skill match score">
+                      🎯 {{ it.compat_score }}% Match
+                    </span>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+              {{ it.description[:130] }}...
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem;">
+              {% for skill in it.skills.split(',') %}
+                <span class="skill-pill skill-pill-neutral">⚡ {{ skill.strip() }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 1rem; margin-top: auto;">
+            <div style="font-size: 0.82rem; color: var(--text-subtle);">
+              <span>📍 {{ it.location }}</span> &bull; 
+              <span>⏰ Deadline: {{ it.deadline or 'Open' }}</span>
+            </div>
+            <a href="{{ url_for('internship_details', internship_id=it.id) }}" class="btn btn-secondary btn-sm">
+              View &amp; Apply &rarr;
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎓</div>
+      <h3 style="font-size: 1.4rem;">No matching internships found</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Try clearing search filters to see all available university and industry internship opportunities.
+      </p>
+      <a href="{{ url_for('internships') }}" class="btn btn-outline btn-sm">Clear Filters</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

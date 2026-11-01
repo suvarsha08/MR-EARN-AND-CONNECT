@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Marketplace - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge badge-success">Skill-to-Earn Marketplace</span>
+        <span class="badge badge-demo">Campus Gig Ecosystem</span>
+      </div>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🛒 Campus Skill Marketplace</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Discover and hire talented MRDU students for lab record writing, document formatting, presentation design, tutoring, and programming.
+      </p>
+    </div>
+
+    {% if current_user and current_user.role == 'student' %}
+      <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm">+ Offer Your Skill to Earn</a>
+    {% endif %}
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <form method="GET" action="{{ url_for('services') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search services (Record Writing, Typing, PPT, Python)..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 200px;">
+      <select name="category" class="form-control">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="min-width: 160px;">
+      <input type="number" name="max_price" class="form-control" placeholder="Max Price (₹)..." value="{{ max_price }}">
+    </div>
+
+    <button type="submit" class="btn btn-secondary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_category or max_price %}
+      <a href="{{ url_for('services') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Service Cards Grid -->
+  {% if services %}
+    <div class="grid-3">
+      {% for srv in services %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #10b981;">
+          <div>
+            <div class="card-header" style="margin-bottom: 0.75rem;">
+              <span class="badge badge-success">{{ srv.category }}</span>
+              <div style="font-size: 1.35rem; font-weight: 800; color: var(--mrdu-green-dark); font-family: var(--font-heading);">
+                ₹{{ "%.0f"|format(srv.price) }}
+              </div>
+            </div>
+
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">
+              <a href="{{ url_for('service_details', service_id=srv.id) }}" class="card-title-link">{{ srv.title }}</a>
+            </h3>
+
+            <!-- Provider Info -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.85rem;">
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: #ffffff;">
+                {{ srv.provider_name[0] }}
+              </div>
+              <div style="font-size: 0.85rem;">
+                <a href="{{ url_for('view_profile', user_id=srv.provider_id) }}" style="color: var(--text-heading-dark); font-weight: 700;">
+                  {{ srv.provider_name }}
+                </a>
+                <span style="color: #fbbf24; margin-left: 4px;">★ {{ "%.1f"|format(srv.avg_rating) }}</span>
+                <span style="color: var(--text-subtle);">({{ srv.review_count }})</span>
+              </div>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1rem;">
+              {{ srv.description[:110] }}...
+            </p>
+
+            <!-- Skills chips -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem;">
+              {% for skill in srv.skills.split(',') %}
+                <span class="skill-pill skill-pill-neutral">⚡ {{ skill.strip() }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Card Footer -->
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem; margin-top: auto;">
+            <div style="font-size: 0.8rem; color: var(--text-subtle);">
+              <span>⏱️ {{ srv.delivery_time }}</span> &bull; 
+              <span style="color: #34d399;">{{ srv.availability }}</span>
+            </div>
+            <a href="{{ url_for('service_details', service_id=srv.id) }}" class="btn btn-secondary btn-sm">
+              View &amp; Order &rarr;
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛒</div>
+      <h3 style="font-size: 1.4rem;">No matching services found</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Try searching with different keywords like Record Writing, Typing, or Web Development.
+      </p>
+      <a href="{{ url_for('services') }}" class="btn btn-outline btn-sm">Reset Filter</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

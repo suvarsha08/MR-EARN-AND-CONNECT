@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Add Achievement - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 760px; padding-top: 1.5rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div>
+        <h2 style="font-size: 1.8rem;">🏆 Add Achievement / Award</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Record hackathons, certifications, and academic milestones</p>
+      </div>
+      <a href="{{ url_for('achievements') }}" class="btn btn-outline btn-sm">&larr; Achievements</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('add_achievement') }}">
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Achievement Title *</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Winner - MRDU Intra-College Ideathon 2025" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select id="category" name="category" class="form-control">
+            <option value="Award" selected>Award / Recognition</option>
+            <option value="Ideathon">Ideathon</option>
+            <option value="Hackathon">Hackathon</option>
+            <option value="Certificate">Certificate / Course</option>
+            <option value="Academic">Academic Honor</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="organization">Awarding Body / Organization *</label>
+          <input type="text" id="organization" name="organization" class="form-control" placeholder="e.g. MRDU Tirupati / IIT Madras / Coursera" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="date">Date Awarded / Completed</label>
+          <input type="text" id="date" name="date" class="form-control" placeholder="e.g. Nov 2025, Feb 2026">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="proof_link">Certificate / Verification URL</label>
+          <input type="url" id="proof_link" name="proof_link" class="form-control" placeholder="https://coursera.org/verify/...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Summary / Significance</label>
+        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Briefly describe what was accomplished, rank or percentile secured, or key takeaways..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Save to Achievements Timeline &rarr;</button>
+        <a href="{{ url_for('achievements') }}" class="btn btn-outline">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

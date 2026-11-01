@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Application Tracking - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-primary">Application Pipeline</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">
+        {% if is_employer %}👥 Received Candidate Applications{% else %}📋 My Submitted Applications{% endif %}
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        {% if is_employer %}
+          Review applicants, evaluate transparent Skill Compatibility, and update review statuses.
+        {% else %}
+          Track the live progression of your job and internship applications:
+          <span style="color: #a5b4fc;">Applied &rarr; Under Review &rarr; Shortlisted &rarr; Selected / Rejected</span>
+        {% endif %}
+      </p>
+    </div>
+
+    {% if not is_employer %}
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary btn-sm">Browse More Jobs</a>
+        <a href="{{ url_for('internships') }}" class="btn btn-outline btn-sm">Browse Internships</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- =============================================================
+       STUDENT VIEW: MY APPLICATIONS
+       ============================================================= -->
+  {% if not is_employer %}
+    {% if applications %}
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        {% for app_item in applications %}
+          <div class="card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="badge badge-neutral">{{ app_item.opp_type }}</span>
+                  <small style="color: var(--text-muted); font-weight: 500;">Applied on {{ app_item.applied_at[:10] }}</small>
+                </div>
+                <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 800; margin-top: 0.35rem;">{{ app_item.title }}</h3>
+                <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem;">
+                  🏢 {{ app_item.company_name }} &bull; 📍 {{ app_item.location }}
+                </p>
+                {% if app_item.cover_note %}
+                  <p style="color: var(--text-main); font-size: 0.88rem; margin-top: 0.5rem; font-style: italic;">
+                    "{{ app_item.cover_note }}"
+                  </p>
+                {% endif %}
+              </div>
+
+              <!-- Status Badge -->
+              <div style="text-align: right;">
+                <span class="badge {% if app_item.status == 'Selected' %}badge-success{% elif app_item.status == 'Shortlisted' %}badge-primary{% elif app_item.status == 'Under Review' %}badge-warning{% elif app_item.status == 'Rejected' %}badge-danger{% else %}badge-info{% endif %}" style="font-size: 0.9rem; padding: 0.4rem 0.9rem;">
+                  {% if app_item.status == 'Selected' %}🎉 Selected!{% elif app_item.status == 'Shortlisted' %}⭐ Shortlisted{% elif app_item.status == 'Under Review' %}⏳ Under Review{% elif app_item.status == 'Rejected' %}❌ Rejected{% else %}📩 Applied{% endif %}
+                </span>
+                
+                <!-- Simple Stage Timeline Tracker -->
+                <div style="display: flex; gap: 4px; margin-top: 0.75rem; justify-content: flex-end;">
+                  <span style="display: inline-block; width: 24px; height: 4px; border-radius: 2px; background: #082142;" title="Applied"></span>
+                  <span style="display: inline-block; width: 24px; height: 4px; border-radius: 2px; background: {% if app_item.status in ['Under Review', 'Shortlisted', 'Selected', 'Rejected'] %}#f59e0b{% else %}var(--border-subtle){% endif %};" title="Under Review"></span>
+                  <span style="display: inline-block; width: 24px; height: 4px; border-radius: 2px; background: {% if app_item.status in ['Shortlisted', 'Selected'] %}#00a651{% elif app_item.status == 'Rejected' %}#dc2626{% else %}var(--border-subtle){% endif %};" title="Shortlisted / Decision"></span>
+                  <span style="display: inline-block; width: 24px; height: 4px; border-radius: 2px; background: {% if app_item.status == 'Selected' %}#00a651{% elif app_item.status == 'Rejected' %}#dc2626{% else %}var(--border-subtle){% endif %};" title="Final Status"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card" style="text-align: center; padding: 3rem 2rem;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📂</div>
+        <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 800;">No applications submitted yet</h3>
+        <p style="color: var(--text-muted); margin: 0.5rem 0 1.5rem;">
+          Browse available jobs and internships, check your skill compatibility, and submit your first application.
+        </p>
+        <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-sm">Find Jobs Now &rarr;</a>
+      </div>
+    {% endif %}
+
+  <!-- =============================================================
+       EMPLOYER VIEW: RECEIVED APPLICANTS
+       ============================================================= -->
+  {% else %}
+    {% if applications %}
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% for app_item in applications %}
+          <div class="card" style="padding: 1.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
+              
+              <!-- Candidate Profile Overview -->
+              <div style="display: flex; gap: 1.25rem; align-items: flex-start;">
+                <div style="width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg, var(--color-primary-navy) 0%, var(--text-heading-medium) 100%); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; font-weight: 800;">
+                  {{ app_item.student_name[0] }}
+                </div>
+
+                <div>
+                  <h3 style="font-size: 1.3rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 2px;">
+                    <a href="{{ url_for('view_profile', user_id=app_item.user_id) }}" target="_blank" class="card-title-link" style="color: var(--text-heading-dark); font-weight: 800;">
+                      {{ app_item.student_name }} &rarr;
+                    </a>
+                  </h3>
+                  <p style="color: var(--text-heading-medium); font-size: 0.9rem; font-weight: 700;">
+                    Applying for: <strong style="color: var(--text-heading-dark); font-weight: 800;">{{ app_item.title }}</strong> ({{ app_item.opp_type }})
+                  </p>
+                  <p style="color: var(--text-main); font-size: 0.85rem; margin-top: 2px; font-weight: 500;">
+                    {{ app_item.course or 'B.Tech' }} &bull; {{ app_item.year or 'Student' }} &bull; CGPA: {{ app_item.cgpa or 'N/A' }}
+                  </p>
+                  <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; font-weight: 500;">
+                    📧 {{ app_item.student_email }} &bull; 📞 {{ app_item.student_phone or 'N/A' }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skill Compatibility Pill & Actions -->
+              <div style="text-align: right; min-width: 200px;">
+                <span class="compat-score-pill {% if app_item.compat_score >= 70 %}compat-high{% elif app_item.compat_score >= 40 %}compat-mid{% else %}compat-low{% endif %}">
+                  🎯 {{ app_item.compat_score }}% Compatibility
+                </span>
+                <small style="display: block; color: var(--text-muted); margin-top: 4px; font-weight: 500;">Calculated using Python set analysis</small>
+
+                <!-- Status Update Form -->
+                <form method="POST" action="{{ url_for('update_application_status', app_id=app_item.id) }}" style="margin-top: 1rem; display: flex; gap: 6px; justify-content: flex-end;">
+                  <select name="status" class="form-control" style="width: auto; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                    <option value="Applied" {% if app_item.status == 'Applied' %}selected{% endif %}>Applied</option>
+                    <option value="Under Review" {% if app_item.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                    <option value="Shortlisted" {% if app_item.status == 'Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                    <option value="Selected" {% if app_item.status == 'Selected' %}selected{% endif %}>Selected</option>
+                    <option value="Rejected" {% if app_item.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
+              </div>
+
+            </div>
+
+            <!-- Skill Compatibility Breakdown -->
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.85rem;">
+              <div>
+                <span style="color: #065f46; font-weight: 750;">✔ Matched:</span>
+                {% for m in app_item.matched_skills %}
+                  <span class="skill-pill skill-pill-matched" style="font-size: 0.75rem; padding: 2px 6px;">{{ m }}</span>
+                {% else %}
+                  <span style="color: var(--text-muted);">None</span>
+                {% endfor %}
+              </div>
+
+              <div>
+                <span style="color: #b45309; font-weight: 750;">⚠ Missing:</span>
+                {% for mis in app_item.missing_skills %}
+                  <span class="skill-pill skill-pill-missing" style="font-size: 0.75rem; padding: 2px 6px;">{{ mis }}</span>
+                {% else %}
+                  <span style="color: #065f46; font-weight: 700;">None (100% matched)</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            {% if app_item.cover_note %}
+              <div style="margin-top: 0.75rem; background: var(--bg-hover); padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-main); border: 1px solid var(--border-subtle);">
+                <strong style="color: var(--text-heading-dark); font-weight: 750;">Cover Note:</strong> "{{ app_item.cover_note }}"
+              </div>
+            {% endif %}
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card" style="text-align: center; padding: 3rem 2rem;">
+        <p style="color: var(--text-muted);">No candidate applications received yet for your postings.</p>
+      </div>
+    {% endif %}
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Campus Announcements - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 860px; padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-info">Notice Board</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">📢 Campus Announcements</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Official notices, hackathon dates, recruitment schedules, and academic updates from MRDU Tirupati.
+      </p>
+    </div>
+
+    {% if current_user and current_user.role == 'admin' %}
+      <a href="{{ url_for('admin') }}" class="btn btn-primary btn-sm">+ Manage Notices in Admin</a>
+    {% endif %}
+  </div>
+
+  {% if announcements %}
+    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+      {% for ann in announcements %}
+        <div class="card" style="padding: 1.75rem; border-left: 3px solid #38bdf8;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-info">{{ ann.category }}</span>
+            <small style="color: var(--text-subtle);">📅 {{ ann.date }}</small>
+          </div>
+
+          <h3 style="font-size: 1.3rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.5rem;">{{ ann.title }}</h3>
+          
+          <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.65; white-space: pre-line; font-weight: 500;">
+            {{ ann.content }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3rem 2rem;">
+      <p style="color: var(--text-muted);">No announcements posted yet.</p>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

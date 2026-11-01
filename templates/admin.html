@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Control Center - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge badge-warning">Administrator Portal</span>
+        <span class="badge badge-demo">Full Platform Governance</span>
+      </div>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">👨‍💼 MRDU System Administration</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Complete platform telemetry, user management, opportunity moderation, announcements, and demo earnings oversight.
+      </p>
+    </div>
+
+    <button class="btn btn-primary btn-sm" data-modal-target="createAnnouncementModal">
+      + Publish Campus Notice
+    </button>
+  </div>
+
+  <!-- KPI SUMMARY ROW 1: USERS & REVENUE -->
+  <h3 style="font-size: 1.15rem; color: var(--text-heading-dark); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
+    👥 Platform Users &amp; Revenue Overview
+  </h3>
+  <div class="grid-4" style="margin-bottom: 2rem;">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(8,33,66,0.1); color: var(--color-primary-navy);">👥</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_users }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Total Registered Users</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(16,52,96,0.1); color: var(--text-heading-medium);">👨‍🎓</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_students }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Enrolled Students</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(249,87,0,0.12); color: var(--color-primary-orange);">🏢</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_employers }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Recruiters / Employers</div>
+    </div>
+
+    <div class="stat-card" style="border-color: rgba(0,166,81,0.35); background: linear-gradient(135deg, rgba(0,166,81,0.08) 0%, var(--bg-card) 100%);">
+      <div class="stat-icon" style="background: rgba(0,166,81,0.15); color: var(--color-secondary-green);">💰</div>
+      <div class="stat-number" style="color: #065f46; font-weight: 800;">₹{{ "%.0f"|format(total_demo_earnings) }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Total Demo Earnings</div>
+    </div>
+  </div>
+
+  <!-- KPI SUMMARY ROW 2: OPPORTUNITIES & ACTIVITY -->
+  <h3 style="font-size: 1.15rem; color: var(--text-heading-dark); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
+    📊 Opportunities &amp; Engagement Metrics
+  </h3>
+  <div class="grid-4" style="margin-bottom: 2.5rem;">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(8,33,66,0.1); color: var(--color-primary-navy);">💼</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_jobs }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Active Job Openings</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(16,52,96,0.1); color: var(--text-heading-medium);">🎓</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_internships }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Paid Internships</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(0,166,81,0.12); color: var(--color-secondary-green);">🛒</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_services }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Marketplace Services</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(249,87,0,0.12); color: var(--color-primary-orange);">📦</div>
+      <div class="stat-number" style="color: var(--text-heading-dark); font-weight: 800;">{{ total_orders }}</div>
+      <div class="stat-label" style="color: var(--text-muted); font-weight: 600;">Campus Orders ({{ completed_orders }} Done)</div>
+    </div>
+  </div>
+
+  <!-- USER MANAGEMENT TABLE -->
+  <div class="card" style="margin-bottom: 2.5rem; padding: 2rem;">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">👥 User Directory &amp; Governance</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">All registered students, employers, and faculty accounts</p>
+      </div>
+      <input type="text" class="form-control" placeholder="Search user directory..." data-live-filter=".user-row" style="max-width: 260px; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-heading-dark); font-weight: 700;">
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">User ID</th>
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">Name</th>
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">Email</th>
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">Role</th>
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">Phone</th>
+            <th style="padding: 0.75rem 0.5rem; color: var(--text-heading-dark);">Joined</th>
+            <th style="padding: 0.75rem 0.5rem; text-align: right; color: var(--text-heading-dark);">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+            <tr class="user-row" style="border-bottom: 1px solid var(--border-subtle);">
+              <td style="padding: 0.85rem 0.5rem; color: var(--text-muted); font-weight: 600;">#{{ u.id }}</td>
+              <td style="padding: 0.85rem 0.5rem; font-weight: 700;">
+                <a href="{{ url_for('view_profile', user_id=u.id) }}" style="color: var(--text-heading-navy); font-weight: 700;">{{ u.name }}</a>
+              </td>
+              <td style="padding: 0.85rem 0.5rem; color: var(--text-main); font-weight: 500;">{{ u.email }}</td>
+              <td style="padding: 0.85rem 0.5rem;">
+                <span class="badge {% if u.role == 'student' %}badge-primary{% elif u.role == 'employer' %}badge-info{% elif u.role == 'admin' %}badge-warning{% else %}badge-success{% endif %}">
+                  {{ u.role.title() }}
+                </span>
+              </td>
+              <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ u.phone or 'N/A' }}</td>
+              <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ u.created_at[:10] }}</td>
+              <td style="padding: 0.85rem 0.5rem; text-align: right;">
+                {% if u.id != current_user.id %}
+                  <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm" style="color: #991b1b; border-color: rgba(153,27,27,0.3); padding: 2px 8px; font-size: 0.75rem;" onclick="return confirm('Permanently delete user {{ u.name }}?');">
+                      Delete
+                    </button>
+                  </form>
+                {% else %}
+                  <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">Current Admin</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CAMPUS ANNOUNCEMENTS CRUD SECTION -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">📢 Campus Announcements Management</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Create, view, and purge campus circulars</p>
+      </div>
+      <button class="btn btn-primary btn-sm" data-modal-target="createAnnouncementModal">+ New Notice</button>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      {% for ann in announcements %}
+        <div style="background: var(--bg-hover); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="badge badge-info">{{ ann.category }}</span>
+              <strong style="color: var(--text-heading-dark); font-size: 1rem; font-weight: 750;">{{ ann.title }}</strong>
+            </div>
+            <small style="color: var(--text-muted); display: block; margin-top: 4px; font-weight: 500;">Date: {{ ann.date }} &bull; {{ ann.content[:90] }}...</small>
+          </div>
+          <form method="POST" action="{{ url_for('delete_announcement', ann_id=ann.id) }}">
+            <button type="submit" class="btn btn-outline-danger btn-sm" style="color: #991b1b; border-color: rgba(153,27,27,0.3); padding: 2px 8px;" onclick="return confirm('Delete announcement?');">
+              Delete
+            </button>
+          </form>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE ANNOUNCEMENT -->
+  <div id="createAnnouncementModal" class="modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px);">
+    <div class="card" style="width: 100%; max-width: 580px; padding: 2rem; position: relative;">
+      <h3 style="font-size: 1.4rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.5rem;">Publish Campus Announcement</h3>
+      
+      <form method="POST" action="{{ url_for('create_announcement') }}">
+        <div class="form-group">
+          <label class="form-label" for="ann_title">Notice Title *</label>
+          <input type="text" id="ann_title" name="title" class="form-control" placeholder="e.g. MRDU Hackathon 2026 - Registration Open" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ann_category">Category *</label>
+          <select id="ann_category" name="category" class="form-control">
+            <option value="Notice">General Notice</option>
+            <option value="Ideathon">Ideathon</option>
+            <option value="Hackathon">Hackathon</option>
+            <option value="Placement">Campus Placement</option>
+            <option value="Workshop">Technical Workshop</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ann_content">Notice Content *</label>
+          <textarea id="ann_content" name="content" class="form-control" rows="4" placeholder="Full announcement text for the student body..." required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
+          <button type="button" class="btn btn-outline" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Announcement &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

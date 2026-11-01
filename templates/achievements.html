@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Student Achievements - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-warning">Wall of Fame</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🏆 Student Honors &amp; Achievements</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Recognizing hackathon prizes, ideathon triumphs, NPTEL/Coursera certifications, and academic excellence at MRDU Tirupati.
+      </p>
+    </div>
+
+    {% if current_user and current_user.role == 'student' %}
+      <a href="{{ url_for('add_achievement') }}" class="btn btn-primary btn-sm">+ Add Achievement</a>
+    {% endif %}
+  </div>
+
+  <!-- Category Filter -->
+  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+    <a href="{{ url_for('achievements') }}" class="btn {% if not selected_category %}btn-primary{% else %}btn-outline{% endif %} btn-sm">
+      All Categories
+    </a>
+    {% for cat in categories %}
+      <a href="{{ url_for('achievements', category=cat.category) }}" class="btn {% if selected_category == cat.category %}btn-primary{% else %}btn-outline{% endif %} btn-sm">
+        {{ cat.category }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Timeline Cards Layout -->
+  {% if achievements %}
+    <div class="timeline" style="max-width: 900px; margin: 0 auto;">
+      {% for ach in achievements %}
+        <div class="timeline-item">
+          <div class="card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="badge badge-warning">{{ ach.category }}</span>
+                  <small style="color: var(--text-subtle);">{{ ach.date }}</small>
+                </div>
+                <h3 style="font-size: 1.3rem; color: var(--text-heading-dark); font-weight: 750; margin-top: 0.35rem;">{{ ach.title }}</h3>
+                <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem;">
+                  🏛️ {{ ach.organization }}
+                </p>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                  Recipient: 
+                  <a href="{{ url_for('view_profile', user_id=ach.student_id) }}" style="color: var(--text-heading-dark); font-weight: 750;">
+                    {{ ach.student_name }}
+                  </a>
+                </div>
+                <small style="color: var(--text-subtle);">{{ ach.course }} ({{ ach.year }})</small>
+              </div>
+            </div>
+
+            {% if ach.description %}
+              <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 0.75rem;">
+                {{ ach.description }}
+              </p>
+            {% endif %}
+
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 0.75rem; margin-top: 1rem;">
+              {% if ach.proof_link %}
+                <a href="{{ ach.proof_link }}" target="_blank" style="font-size: 0.85rem; color: #34d399; font-weight: 600;">
+                  🔗 View Credential / Proof &rarr;
+                </a>
+              {% else %}
+                <span style="font-size: 0.8rem; color: var(--text-subtle);">Institutional Verified</span>
+              {% endif %}
+
+              {% if current_user and (current_user.id == ach.student_id or current_user.role == 'admin') %}
+                <form method="POST" action="{{ url_for('delete_achievement', ach_id=ach.id) }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm" style="color: #f87171; border-color: rgba(248,113,113,0.3); padding: 2px 8px;" onclick="return confirm('Remove achievement?');">
+                    🗑️
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏆</div>
+      <h3 style="font-size: 1.4rem;">No achievements found in this category</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Record your certifications, prizes, and competitive accomplishments.
+      </p>
+      {% if current_user and current_user.role == 'student' %}
+        <a href="{{ url_for('add_achievement') }}" class="btn btn-primary btn-sm">+ Add Achievement</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

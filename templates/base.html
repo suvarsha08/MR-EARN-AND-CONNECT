@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MR EARN & CONNECT{% endblock %} | MRDU Tirupati</title>
+  <meta name="description" content="MR EARN & CONNECT - Find Opportunities. Connect Skills. Earn. Unified student opportunity and skill monetization platform at Malla Reddy Deemed to be University, Tirupati.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="{{ url_for('index') }}" class="brand-logo" title="MR EARN & CONNECT - MRDU Tirupati">
+        <img src="{{ url_for('static', filename='images/mrdu_logo.jpg') }}" alt="MRDU Official Logo" class="brand-logo-img">
+        <div class="brand-text">
+          MR <span class="earn">EARN</span> &amp; <span class="connect">CONNECT</span>
+          <span class="brand-badge">MRDU</span>
+        </div>
+      </a>
+
+      <!-- Desktop & Mobile Navigation Menu -->
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="{{ url_for('index') }}" class="nav-link">Home</a></li>
+        <li><a href="{{ url_for('jobs') }}" class="nav-link">Jobs</a></li>
+        <li><a href="{{ url_for('internships') }}" class="nav-link">Internships</a></li>
+        <li><a href="{{ url_for('services') }}" class="nav-link">Skill Marketplace</a></li>
+        <li><a href="{{ url_for('opportunities') }}" class="nav-link">Opportunities</a></li>
+        <li><a href="{{ url_for('projects') }}" class="nav-link">Projects</a></li>
+        <li><a href="{{ url_for('achievements') }}" class="nav-link">Achievements</a></li>
+        <li><a href="{{ url_for('campus') }}" class="nav-link">MRDU Campus</a></li>
+        <li><a href="{{ url_for('connections') }}" class="nav-link">Connect</a></li>
+        <li><a href="{{ url_for('about') }}" class="nav-link">About</a></li>
+
+        {% if current_user %}
+          <li style="border-top: 1px solid var(--border-subtle); padding-top: 0.5rem; display: none;" class="mobile-only-auth"></li>
+          <li><a href="{{ url_for('dashboard') }}" class="nav-link" style="color: #a5b4fc; font-weight: 600;">Dashboard</a></li>
+          {% if current_user.role == 'student' %}
+            <li><a href="{{ url_for('my_profile') }}" class="nav-link">My Portfolio</a></li>
+            <li><a href="{{ url_for('skills') }}" class="nav-link">My Skills</a></li>
+            <li><a href="{{ url_for('skill_analysis') }}" class="nav-link">Skill Analysis</a></li>
+            <li><a href="{{ url_for('my_applications') }}" class="nav-link">Applications</a></li>
+            <li><a href="{{ url_for('orders') }}" class="nav-link">Orders</a></li>
+            <li><a href="{{ url_for('my_earnings') }}" class="nav-link" style="color: #34d399; font-weight: 600;">Earnings</a></li>
+          {% elif current_user.role == 'employer' %}
+            <li><a href="{{ url_for('my_applications') }}" class="nav-link">Applicants</a></li>
+            <li><a href="{{ url_for('create_job') }}" class="nav-link">+ Post Job</a></li>
+            <li><a href="{{ url_for('create_internship') }}" class="nav-link">+ Post Internship</a></li>
+          {% elif current_user.role == 'customer' %}
+            <li><a href="{{ url_for('orders') }}" class="nav-link">My Orders</a></li>
+          {% elif current_user.role == 'admin' %}
+            <li><a href="{{ url_for('admin') }}" class="nav-link" style="color: #fbbf24; font-weight: 700;">Admin Panel</a></li>
+          {% endif %}
+          <li class="mobile-only-auth"><a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Logout</a></li>
+        {% else %}
+          <li class="mobile-only-auth"><a href="{{ url_for('login') }}" class="btn btn-login btn-sm">Login</a></li>
+          <li class="mobile-only-auth"><a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Register</a></li>
+        {% endif %}
+      </ul>
+
+      <!-- User quick actions (Desktop) -->
+      <div class="nav-auth">
+        {% if current_user %}
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-sm" style="gap: 6px;">
+            <span style="display:inline-block; width:8px; height:8px; background:#10b981; border-radius:50%;"></span>
+            {{ current_user.name.split(' ')[0] }} ({{ current_user.role.title() }})
+          </a>
+          <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm" title="Sign Out">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-login btn-sm" id="nav-login-btn">Login</a>
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm" id="nav-register-btn">Register</a>
+        {% endif %}
+        <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Toggle Menu">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Alerts -->
+  <div class="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              {% if category == 'success' %}<span>✅</span>{% elif category == 'danger' %}<span>❌</span>{% elif category == 'warning' %}<span>⚠️</span>{% else %}<span>ℹ️</span>{% endif %}
+              <span>{{ message }}</span>
+            </div>
+            <button class="alert-close" type="button">&times;</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Page Content -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 0.75rem;">
+            <img src="{{ url_for('static', filename='images/mrdu_logo.jpg') }}" alt="MRDU Official Logo" class="brand-logo-img" style="height: 48px;">
+            <div>MR <span class="earn">EARN</span> &amp; <span class="connect">CONNECT</span></div>
+          </div>
+          <p>“Find Opportunities. Connect Skills. Earn.”</p>
+          <p style="margin-top: 0.5rem; font-size: 0.82rem; color: var(--text-subtle);">
+            Tailored for <strong>Malla Reddy Deemed to be University (MRDU), Tirupati</strong>. Empowering undergraduate students to learn, showcase talents, earn from skills, and accelerate their careers.
+          </p>
+          <div style="margin-top: 1rem;">
+            <span class="badge badge-demo">Ideathon 2026 Prototype</span>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h5>Quick Portals</h5>
+          <ul>
+            <li><a href="{{ url_for('jobs') }}">Job Portal</a></li>
+            <li><a href="{{ url_for('internships') }}">Internships</a></li>
+            <li><a href="{{ url_for('services') }}">Skill Marketplace</a></li>
+            <li><a href="{{ url_for('opportunities') }}">Competitions &amp; Hackathons</a></li>
+            <li><a href="{{ url_for('projects') }}">Student Projects</a></li>
+            <li><a href="{{ url_for('achievements') }}">Student Achievements</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h5>MRDU Campus</h5>
+          <ul>
+            <li><a href="{{ url_for('campus') }}">Campus Portal</a></li>
+            <li><a href="{{ url_for('announcements') }}">Announcements</a></li>
+            <li><a href="{{ url_for('connections') }}">Student &amp; Mentor Network</a></li>
+            <li><a href="{{ url_for('about') }}">About MR EARN &amp; CONNECT</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h5>Demo &amp; Testing</h5>
+          <ul>
+            <li><a href="{{ url_for('demo_login', role='student') }}">⚡ Student Demo (Arjun)</a></li>
+            <li><a href="{{ url_for('demo_login', role='employer') }}">⚡ Employer Demo (TechCorp)</a></li>
+            <li><a href="{{ url_for('demo_login', role='customer') }}">⚡ Customer Demo (Faculty)</a></li>
+            <li><a href="{{ url_for('demo_login', role='admin') }}">⚡ Admin Panel Demo</a></li>
+            <li><a href="{{ url_for('register') }}">Create New Account</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; {{ now.year }} MR EARN &amp; CONNECT &bull; Malla Reddy Deemed to be University, Tirupati. All rights reserved.
+        </div>
+        <div>
+          <span style="color: #64748b;">Transparent Python Compatibility Logic &bull; Strictly No AI Job Matching &bull; Demo Prototype</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

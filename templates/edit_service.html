@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Service - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 780px; padding-top: 1.5rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div>
+        <h2 style="font-size: 1.8rem;">✏️ Edit Service Listing</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Update pricing, delivery times, and availability</p>
+      </div>
+      <a href="{{ url_for('service_details', service_id=service.id) }}" class="btn btn-outline btn-sm">&larr; View Service</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('edit_service', service_id=service.id) }}">
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Service Title *</label>
+        <input type="text" id="title" name="title" class="form-control" value="{{ service.title }}" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select id="category" name="category" class="form-control">
+            <option value="Academic & Writing" {% if service.category == 'Academic & Writing' %}selected{% endif %}>Academic &amp; Writing</option>
+            <option value="Data & Office" {% if service.category == 'Data & Office' %}selected{% endif %}>Data &amp; Office</option>
+            <option value="Design & Media" {% if service.category == 'Design & Media' %}selected{% endif %}>Design &amp; Media</option>
+            <option value="Software & Web" {% if service.category == 'Software & Web' %}selected{% endif %}>Software &amp; Web</option>
+            <option value="Tutoring & Mentorship" {% if service.category == 'Tutoring & Mentorship' %}selected{% endif %}>Tutoring &amp; Mentorship</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="price">Price (₹ INR) *</label>
+          <input type="number" step="10" min="50" id="price" name="price" class="form-control" value="{{ "%.0f"|format(service.price) }}" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="delivery_time">Delivery Time *</label>
+          <input type="text" id="delivery_time" name="delivery_time" class="form-control" value="{{ service.delivery_time }}" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="availability">Availability *</label>
+          <select id="availability" name="availability" class="form-control">
+            <option value="Available" {% if service.availability == 'Available' %}selected{% endif %}>Available</option>
+            <option value="Busy" {% if service.availability == 'Busy' %}selected{% endif %}>Busy</option>
+            <option value="Unavailable" {% if service.availability == 'Unavailable' %}selected{% endif %}>Unavailable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="skills">Skills Applied (Comma-separated) *</label>
+        <input type="text" id="skills" name="skills" class="form-control" value="{{ service.skills }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Detailed Service Description *</label>
+        <textarea id="description" name="description" class="form-control" rows="4" required>{{ service.description }}</textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-secondary" style="flex: 1;">Save Changes &rarr;</button>
+        <a href="{{ url_for('service_details', service_id=service.id) }}" class="btn btn-outline">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

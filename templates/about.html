@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}About MR EARN & CONNECT - Project Vision & Philosophy{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; padding-top: 1.5rem;">
+
+  <div class="card dark-hero-card" style="padding: 3rem 2.5rem; margin-bottom: 2.5rem; text-align: center; background: linear-gradient(135deg, #082142 0%, #103460 100%); border: 2px solid rgba(249,87,0,0.35); color: #ffffff;">
+    <div style="display: flex; justify-content: center; margin-bottom: 1.25rem;">
+      <img src="{{ url_for('static', filename='images/mrdu_logo.jpg') }}" alt="Malla Reddy Deemed to be University Official Logo" style="height: 85px; width: auto; object-fit: contain; background: #ffffff; padding: 6px 14px; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(0,0,0,0.2);">
+    </div>
+    <span class="badge badge-primary" style="margin-bottom: 0.75rem;">University Innovation Ecosystem</span>
+    <h1 style="font-size: 2.6rem; color: #ffffff; font-weight: 850; margin-bottom: 0.5rem; letter-spacing: -0.02em;">MR EARN &amp; CONNECT</h1>
+    <p style="color: #4ade80; font-size: 1.25rem; font-weight: 750; font-family: var(--font-heading);">
+      “Find Opportunities. Connect Skills. Earn.”
+    </p>
+    <p style="color: #e2e8f0; max-width: 700px; margin: 1rem auto 0; font-size: 0.95rem; line-height: 1.7; font-weight: 500;">
+      Created for <strong style="color: #ffffff;">Malla Reddy Deemed to be University (MRDU), Tirupati</strong> to solve the fragmentation of student career opportunities, unlock skill-based micro-earnings, and build verified academic portfolios.
+    </p>
+  </div>
+
+  <!-- Core Message Banner -->
+  <div class="card" style="padding: 1.75rem; border: 2px solid #bbf7d0; background: #f0fdf4; text-align: center; margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.6rem; font-weight: 800; color: #047857; margin-bottom: 0.35rem;">🏆 Core Philosophy</h2>
+    <p style="font-size: 1.25rem; font-weight: 800; color: #082142;">
+      “Every student has skills. Every skill can create an opportunity.”
+    </p>
+  </div>
+
+  <!-- Judge-Friendly Breakdown: Problem, Solution, Unique Value -->
+  <div class="grid-3" style="margin-bottom: 2.5rem;">
+    <div class="card" style="padding: 1.75rem;">
+      <h3 style="color: #991b1b; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem;">⚠️ The Problem</h3>
+      <p style="color: var(--text-main); font-size: 0.92rem; line-height: 1.65;">
+        Students often have to search different places for jobs, internships, competitions, services, projects, and career opportunities. Furthermore, students possess valuable practical skills (record writing, formatting, typing, Python coding) but lack a transparent campus platform to monetize them.
+      </p>
+    </div>
+
+    <div class="card" style="padding: 1.75rem;">
+      <h3 style="color: #065f46; font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem;">💡 The Solution</h3>
+      <p style="color: var(--text-main); font-size: 0.92rem; line-height: 1.65;">
+        MR EARN &amp; CONNECT combines all these disparate domains into one cohesive student-focused ecosystem. Students create rich portfolios, list marketable skills as campus services, receive orders, and track transparent job compatibility in real time.
+      </p>
+    </div>
+
+    <div class="card" style="padding: 1.75rem;">
+      <h3 style="color: var(--color-primary-navy); font-size: 1.3rem; font-weight: 800; margin-bottom: 0.75rem;">✨ The Unique Value</h3>
+      <p style="color: var(--text-main); font-size: 0.92rem; line-height: 1.65;">
+        The continuous 8-step journey:
+        <strong style="color: var(--text-heading-dark);">Learn &rarr; Build Skills &rarr; Create Profile &rarr; Analyze Skills &rarr; Connect &rarr; Find Jobs / Internships &rarr; Apply &rarr; Offer Services &rarr; Earn &rarr; Build Portfolio &rarr; Grow.</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- Architectural Guarantee: NO AI JOB MATCHING -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem; border-color: rgba(249,87,0,0.35);">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; flex-wrap: wrap;">
+      <span class="badge badge-warning">Architectural Constraint</span>
+      <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0;">Strictly Explainable Logic (NO AI Black-Box)</h3>
+    </div>
+    <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.7;">
+      As required by the project specifications, MR EARN &amp; CONNECT explicitly avoids opaque AI models or black-box embeddings for job matching. Instead, the <strong>Skill Compatibility Analysis</strong> is calculated transparently using pure Python string and set comparison logic. Students and judges can examine the exact matched skills (✔) and missing skills to develop (⚠) without algorithmic bias.
+    </p>
+  </div>
+
+  <!-- Technology Stack Details -->
+  <div class="card" style="padding: 2rem;">
+    <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 1rem;">🐍 Technology Stack</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div style="background: var(--bg-hover); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <strong style="color: var(--color-primary-navy); font-size: 1rem; font-weight: 750;">Backend</strong>
+        <p style="color: var(--text-main); font-size: 0.88rem; margin-top: 4px; font-weight: 500;">Python 3.14 + Flask Web Framework</p>
+      </div>
+      <div style="background: var(--bg-hover); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <strong style="color: #0369a1; font-size: 1rem; font-weight: 750;">Database</strong>
+        <p style="color: var(--text-main); font-size: 0.88rem; margin-top: 4px; font-weight: 500;">Relational SQLite3 (15 Tables)</p>
+      </div>
+      <div style="background: var(--bg-hover); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <strong style="color: #065f46; font-size: 1rem; font-weight: 750;">Frontend</strong>
+        <p style="color: var(--text-main); font-size: 0.88rem; margin-top: 4px; font-weight: 500;">Semantic HTML5, CSS3, Vanilla JS</p>
+      </div>
+      <div style="background: var(--bg-hover); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+        <strong style="color: #b45309; font-size: 1rem; font-weight: 750;">Security</strong>
+        <p style="color: var(--text-main); font-size: 0.88rem; margin-top: 4px; font-weight: 500;">Werkzeug Password Hashing &amp; RBAC</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,1416 @@
+/* ===================================================================
+   MR EARN & CONNECT - OFFICIAL MRDU UNIVERSITY DESIGN SYSTEM
+   Malla Reddy Deemed to be University (MRDU), Tirupati
+   "Find Opportunities. Connect Skills. Earn."
+   
+   Branding Palette Inspired by Official MRDU Logo:
+   - Deep Navy Blue: #082142 (Graduation Cap & Academic Typography)
+   - Vibrant Orange: #f95700 (Central "MR" Monogram & 5 Stars)
+   - Laurel Green:   #00a651 (Encircling Achievement Laurel Wreath)
+   - Clean Campus:   #f8fafc (Light Executive Background & Crisp White Cards)
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Official MRDU University Colors */
+  --mrdu-navy-dark: #041427;
+  --mrdu-navy: #082142;
+  --mrdu-navy-medium: #103460;
+  --mrdu-navy-light: #1e4b82;
+  --mrdu-navy-soft: #eff6ff;
+
+  --mrdu-orange: #f95700;
+  --mrdu-orange-dark: #c2410c;
+  --mrdu-orange-hover: #ea580c;
+  --mrdu-orange-light: #fff7ed;
+  --mrdu-orange-border: rgba(249, 87, 0, 0.35);
+
+  --mrdu-green: #00a651;
+  --mrdu-green-dark: #047857;
+  --mrdu-green-hover: #059669;
+  --mrdu-green-light: #f0fdf4;
+  --mrdu-green-border: rgba(0, 166, 81, 0.35);
+
+  /* Core Palette Tokens */
+  --primary: #f95700; /* Vibrant MRDU Orange for Action & Earn */
+  --primary-hover: #ea580c;
+  --primary-light: #fff7ed;
+  --primary-glow: rgba(249, 87, 0, 0.25);
+  --primary-navy: #082142; /* Deep MRDU Navy */
+
+  --secondary: #00a651; /* MRDU Laurel Green for Connect & Success */
+  --secondary-hover: #059669;
+  --secondary-light: #f0fdf4;
+
+  --accent-amber: #d97706;
+  --accent-amber-light: #fef3c7;
+  --accent-blue: #0284c7;
+  --accent-rose: #e11d48;
+  --accent-purple: #7c3aed;
+
+  /* Light & Clean University Canvas */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #ffffff;
+  --bg-inner: #f8fafc;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+
+  /* Clean Borders */
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-accent: rgba(249, 87, 0, 0.3);
+
+  /* High-Contrast Readability & Authoritative Typography */
+  --text-main: #1e293b;
+  --text-heading: #041427; /* Very dark official MRDU navy-black */
+  --text-heading-dark: #041427; /* Deep near-black navy for main headings */
+  --text-heading-navy: #082142; /* Official MRDU Navy for section & card titles */
+  --text-heading-medium: #103460; /* Medium MRDU Navy for subheadings */
+  --text-muted: #475569; /* Slate 600 - crisp, easy to read */
+  --text-subtle: #64748b; /* Slate 500 */
+
+  /* Typography */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Elegant University Shadows */
+  --shadow-sm: 0 2px 4px rgba(8, 33, 66, 0.05);
+  --shadow-md: 0 4px 20px -2px rgba(8, 33, 66, 0.08);
+  --shadow-lg: 0 12px 30px -4px rgba(8, 33, 66, 0.12);
+  --shadow-orange: 0 4px 16px rgba(249, 87, 0, 0.28);
+  --shadow-green: 0 4px 16px rgba(0, 166, 81, 0.25);
+  --shadow-navy: 0 4px 16px rgba(8, 33, 66, 0.25);
+
+  /* Layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* -------------------------------------------------------------------
+   BASE STYLES & RESET
+   ------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: 
+    radial-gradient(circle at 12% 10%, rgba(8, 33, 66, 0.035) 0%, transparent 45%),
+    radial-gradient(circle at 88% 80%, rgba(249, 87, 0, 0.035) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(0, 166, 81, 0.025) 0%, transparent 50%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
+/* Clear Typography Scale & Visual Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-heading);
+  letter-spacing: -0.02em;
+  text-rendering: optimizeLegibility;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 4vw, 2.65rem);
+  font-weight: 800;
+  color: var(--text-heading-dark);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  font-weight: 800;
+  color: var(--text-heading-dark);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.2vw, 1.45rem);
+  font-weight: 750;
+  color: var(--text-heading-navy);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+h4 {
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-weight: 700;
+  color: var(--text-heading-navy);
+  line-height: 1.4;
+}
+
+h5 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-heading-medium);
+  line-height: 1.45;
+}
+
+h6 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+a {
+  color: var(--mrdu-navy);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--mrdu-orange);
+}
+
+/* -------------------------------------------------------------------
+   CONTAINER & LAYOUT
+   ------------------------------------------------------------------- */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  width: 100%;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 1rem;
+  padding-bottom: 4.5rem;
+}
+
+/* -------------------------------------------------------------------
+   NAVIGATION BAR (COMMANDING MRDU DEEP NAVY WITH GOLD/ORANGE ACCENT)
+   ------------------------------------------------------------------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--mrdu-navy);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f95700 0%, #00a651 50%, #f95700 100%) 1;
+  box-shadow: 0 4px 20px rgba(8, 33, 66, 0.18);
+  transition: var(--transition);
+  padding: 0.5rem 0;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 84px;
+  gap: 1rem;
+  overflow: visible;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-heading);
+  font-size: 1.38rem;
+  font-weight: 800;
+  color: #ffffff;
+  text-decoration: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.brand-logo:hover {
+  color: #ffffff;
+}
+
+.brand-logo-img {
+  height: 60px;
+  width: auto;
+  max-width: 175px;
+  object-fit: contain;
+  background: #ffffff;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
+  flex-shrink: 0;
+  display: block;
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: scale(1.02);
+}
+
+.brand-icon-box {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--mrdu-orange) 0%, var(--mrdu-green) 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: var(--shadow-orange);
+}
+
+.brand-text {
+  color: #ffffff;
+  line-height: 1.25;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.brand-text span.earn {
+  color: #ff782e;
+  font-weight: 800;
+}
+
+.brand-text span.connect {
+  color: #4ade80;
+  font-weight: 800;
+}
+
+.brand-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(249, 87, 0, 0.25);
+  color: #fed7aa;
+  border: 1px solid rgba(249, 87, 0, 0.5);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  flex-shrink: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.nav-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  color: #ffffff;
+  background: var(--mrdu-orange);
+  box-shadow: 0 2px 8px rgba(249, 87, 0, 0.3);
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* High-Contrast Login Button (Official MRDU Laurel Green #00a651 from University Logo) */
+.btn-login,
+.nav-auth .btn-login,
+.nav-menu .btn-login,
+.nav-auth a[href*="login"]:not(.btn-primary),
+.nav-menu a[href*="login"]:not(.btn-primary) {
+  background: linear-gradient(135deg, #00a651 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #00a651 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 10px rgba(0, 166, 81, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.btn-login:hover,
+.nav-auth .btn-login:hover,
+.nav-menu .btn-login:hover,
+.nav-auth a[href*="login"]:not(.btn-primary):hover,
+.nav-menu a[href*="login"]:not(.btn-primary):hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  color: #ffffff !important;
+  border-color: #047857 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 166, 81, 0.45);
+}
+
+/* Ensure Register / Get Started Button has high contrast and matches MRDU Orange */
+.nav-auth .btn-primary,
+.nav-menu .btn-primary {
+  background: linear-gradient(135deg, var(--mrdu-orange) 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--mrdu-orange) !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow-orange);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.nav-auth .btn-primary:hover,
+.nav-menu .btn-primary:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  color: #ffffff !important;
+  border-color: #c2410c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(249, 87, 0, 0.45);
+}
+
+.nav-auth .btn-outline {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  font-weight: 600;
+}
+
+.nav-auth .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  color: #ffffff !important;
+}
+
+.nav-auth .btn-outline-primary {
+  color: #ffffff;
+  border-color: #ff914d;
+  background: rgba(249, 87, 0, 0.2);
+}
+
+.nav-auth .btn-outline-primary:hover {
+  background: var(--mrdu-orange);
+  color: #ffffff;
+  border-color: var(--mrdu-orange);
+}
+
+.mobile-only-auth {
+  display: none;
+}
+
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+/* -------------------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.65rem 1.3rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Primary Action Button (MRDU Vibrant Orange) */
+.btn-primary {
+  background: linear-gradient(135deg, var(--mrdu-orange) 0%, #ea580c 100%);
+  color: #ffffff !important;
+  box-shadow: var(--shadow-orange);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(249, 87, 0, 0.4);
+}
+
+/* Secondary Button (MRDU Laurel Green) */
+.btn-secondary {
+  background: linear-gradient(135deg, var(--mrdu-green) 0%, #059669 100%);
+  color: #ffffff !important;
+  box-shadow: var(--shadow-green);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 166, 81, 0.35);
+}
+
+/* Outlined Institutional Button */
+.btn-outline {
+  background: #ffffff;
+  border-color: var(--border-medium);
+  color: var(--text-main);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline:hover {
+  background: var(--bg-secondary);
+  border-color: var(--mrdu-navy);
+  color: var(--mrdu-navy);
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+  background: #ffffff;
+  border-color: var(--mrdu-navy);
+  color: var(--mrdu-navy);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-outline-primary:hover {
+  background: var(--mrdu-navy);
+  border-color: var(--mrdu-navy);
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 0.85rem 1.95rem;
+  font-size: 1.05rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+}
+
+/* -------------------------------------------------------------------
+   BADGES & PILLS
+   ------------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.badge-primary {
+  background: var(--mrdu-orange-light);
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.badge-success {
+  background: var(--mrdu-green-light);
+  color: #047857;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-warning {
+  background: var(--accent-amber-light);
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.badge-danger {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+.badge-info {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.badge-neutral {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.badge-demo {
+  background: #fff7ed;
+  color: #ea580c;
+  border: 1px dashed #f97316;
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  font-weight: 700;
+}
+
+/* -------------------------------------------------------------------
+   FLASH NOTIFICATIONS / ALERTS
+   ------------------------------------------------------------------- */
+.flash-container {
+  max-width: 1280px;
+  margin: 1.25rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.alert {
+  padding: 1rem 1.35rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  animation: slideDown 0.3s ease-out;
+  font-weight: 500;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-success {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.alert-danger {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.alert-warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.alert-info {
+  background: #eff6ff;
+  border: 1px solid #93c5fd;
+  color: #1e40af;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.3rem;
+  cursor: pointer;
+  opacity: 0.65;
+}
+.alert-close:hover { opacity: 1; }
+
+/* -------------------------------------------------------------------
+   CARDS & PANELS (ELEGANT CRISP WHITE WITH UNIVERSITY ELEVATION)
+   ------------------------------------------------------------------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.65rem;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.15rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 750;
+  color: var(--text-heading-dark);
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* Card titles, job titles, internship titles, service titles links */
+.card h1 a,
+.card h2 a,
+.card h3 a,
+.card h4 a,
+.card .card-title a,
+.card-title-link {
+  color: var(--text-heading-dark) !important;
+  font-weight: 750;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.card h1 a:hover,
+.card h2 a:hover,
+.card h3 a:hover,
+.card h4 a:hover,
+.card .card-title a:hover,
+.card-title-link:hover {
+  color: var(--mrdu-orange) !important;
+}
+
+/* -------------------------------------------------------------------
+   HERO SECTION (HOME)
+   ------------------------------------------------------------------- */
+.hero-section {
+  padding: 4.5rem 0 3.5rem;
+  text-align: center;
+  position: relative;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.45rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mrdu-navy-dark);
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-title {
+  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  line-height: 1.12;
+  margin-bottom: 1.35rem;
+  font-weight: 800;
+  color: var(--text-heading-dark);
+  letter-spacing: -0.03em;
+}
+
+.hero-gradient-text {
+  background: linear-gradient(135deg, var(--mrdu-orange) 0%, #ea580c 50%, var(--mrdu-green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: var(--text-muted);
+  max-width: 780px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.65;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+
+/* -------------------------------------------------------------------
+   PLATFORM FLOW VISUAL DIAGRAM
+   ------------------------------------------------------------------- */
+.flow-container {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 1.75rem;
+  margin: 3.5rem auto;
+  max-width: 1120px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.flow-title {
+  font-size: 1.1rem;
+  color: var(--mrdu-navy);
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.flow-node {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 0.85rem 1.35rem;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mrdu-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.flow-node.highlight {
+  border-color: var(--mrdu-orange);
+  background: linear-gradient(135deg, #fff7ed 0%, #f0fdf4 100%);
+  color: var(--mrdu-orange-dark);
+  box-shadow: 0 4px 14px rgba(249, 87, 0, 0.15);
+}
+
+.flow-node:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.flow-arrow {
+  color: var(--mrdu-orange);
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+/* -------------------------------------------------------------------
+   STATS SECTION
+   ------------------------------------------------------------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0 4rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.85rem;
+  text-align: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-medium);
+}
+
+.stat-card .stat-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 1rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+}
+
+.stat-card.stat-students .stat-icon { background: #eff6ff; color: var(--mrdu-navy); }
+.stat-card.stat-jobs .stat-icon { background: #fff7ed; color: var(--mrdu-orange); }
+.stat-card.stat-internships .stat-icon { background: #fefce8; color: var(--accent-amber); }
+.stat-card.stat-services .stat-icon { background: #f0fdf4; color: var(--mrdu-green); }
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  color: var(--mrdu-navy);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------------
+   SKILL COMPATIBILITY ANALYSIS BADGE & CARD (NO AI)
+   ------------------------------------------------------------------- */
+.compat-box {
+  background: #ffffff;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid var(--mrdu-navy);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  margin: 1.35rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.compat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.compat-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--mrdu-navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compat-score-pill {
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 0.3rem 0.85rem;
+  border-radius: var(--radius-full);
+}
+
+.compat-high { background: #f0fdf4; color: #166534; border: 1px solid #86efac; }
+.compat-mid { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+.compat-low { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+
+.compat-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.6rem;
+}
+
+.skill-pill {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.32rem 0.75rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.skill-pill-matched {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.skill-pill-missing {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
+}
+
+.skill-pill-neutral {
+  background: #f1f5f9;
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+/* -------------------------------------------------------------------
+   PROGRESS BARS
+   ------------------------------------------------------------------- */
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s ease-in-out;
+  background: linear-gradient(90deg, var(--mrdu-navy) 0%, var(--mrdu-orange) 50%, var(--mrdu-green) 100%);
+}
+
+.progress-bar-emerald {
+  background: linear-gradient(90deg, #00a651 0%, #059669 100%);
+}
+
+/* -------------------------------------------------------------------
+   DEMO EARNINGS DISPLAY (PRESTIGIOUS MRDU LAUREL GREEN & ORANGE)
+   ------------------------------------------------------------------- */
+.earnings-hero-card {
+  background: linear-gradient(135deg, #082142 0%, #0c2b54 100%);
+  border: 2px solid rgba(0, 166, 81, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem 2rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(8, 33, 66, 0.2);
+  margin-bottom: 2rem;
+  color: #ffffff;
+}
+
+.earnings-hero-card h1, .earnings-hero-card h2, .earnings-hero-card h3 {
+  color: #ffffff;
+}
+
+.earnings-amount {
+  font-size: 3.6rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  color: #4ade80;
+  letter-spacing: -0.02em;
+  margin: 0.5rem 0;
+}
+
+.earnings-disclaimer {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+/* -------------------------------------------------------------------
+   FORMS & INPUTS
+   ------------------------------------------------------------------- */
+.form-group {
+  margin-bottom: 1.35rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--mrdu-navy);
+  margin-bottom: 0.45rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--mrdu-orange);
+  box-shadow: 0 0 0 3px rgba(249, 87, 0, 0.18);
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 110px;
+}
+
+/* -------------------------------------------------------------------
+   SEARCH & FILTERS BAR
+   ------------------------------------------------------------------- */
+.filter-bar {
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-input {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* -------------------------------------------------------------------
+   GRIDS FOR JOBS, SERVICES, PROJECTS
+   ------------------------------------------------------------------- */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+/* -------------------------------------------------------------------
+   TIMELINE (ACHIEVEMENTS, APPLICATIONS)
+   ------------------------------------------------------------------- */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-medium);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 1.85rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--mrdu-orange);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--border-medium);
+}
+
+/* -------------------------------------------------------------------
+   1-CLICK DEMO ACCOUNT SWITCHER BAR
+   ------------------------------------------------------------------- */
+.demo-switcher-box {
+  background: #ffffff;
+  border: 2px solid #fed7aa;
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  margin: 1.75rem 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.demo-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+/* -------------------------------------------------------------------
+   TABLES (CLEAN WHITE WITH NAVY HEADERS)
+   ------------------------------------------------------------------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th {
+  background: #f1f5f9;
+  color: var(--text-heading-dark);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border-medium);
+}
+
+table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  font-size: 0.92rem;
+}
+
+table tr:hover td {
+  background: #f8fafc;
+}
+
+/* -------------------------------------------------------------------
+   INNER CONTAINERS & CARD ITEM OVERRIDES
+   Ensures crystal-clear high contrast across all pages & templates
+   ------------------------------------------------------------------- */
+div[style*="background: rgba(0,0,0"] {
+  background: var(--bg-inner) !important;
+  border: 1px solid var(--border-subtle) !important;
+  color: var(--text-main) !important;
+}
+
+div[style*="background: rgba(0,0,0"] strong,
+div[style*="background: rgba(0,0,0"] a {
+  color: var(--text-heading-dark) !important;
+}
+
+div[style*="background: rgba(0,0,0"] h1,
+div[style*="background: rgba(0,0,0"] h2,
+div[style*="background: rgba(0,0,0"] h3,
+div[style*="background: rgba(0,0,0"] h4,
+div[style*="background: rgba(0,0,0"] h5,
+div[style*="background: rgba(0,0,0"] h6 {
+  color: var(--text-heading-dark) !important;
+  font-weight: 750 !important;
+}
+
+/* Card Heading Overrides on Light Cards (fixing legacy inline dark-mode styles) */
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) strong[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) a[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h1[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h2[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h3[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #ffffff"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h3[style*="color: #818cf8"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #818cf8"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #a5b4fc"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #38bdf8"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #fbbf24"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #f43f5e"],
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) h4[style*="color: #a855f7"] {
+  color: var(--text-heading-dark) !important;
+  font-weight: 750 !important;
+}
+
+/* Company names on cards: high-contrast navy */
+.card:not(.dark-hero-card):not([style*="linear-gradient(135deg, #082142"]):not([style*="linear-gradient(135deg, #0c2b54"]):not([style*="rgba(17,24,39"]) p[style*="color: #a5b4fc"] {
+  color: var(--text-heading-medium) !important;
+  font-weight: 700 !important;
+}
+
+.card:not(.dark-hero-card) a[style*="color: #ffffff"]:hover {
+  color: var(--mrdu-orange) !important;
+}
+
+/* Guarantee white & bright contrast on intentional dark hero / dark banner cards */
+.earnings-hero-card,
+.earnings-hero-card *,
+.dark-hero-card,
+.dark-hero-card *,
+.navbar,
+.navbar *,
+.footer,
+.footer *,
+[style*="linear-gradient(135deg, #082142"] h1,
+[style*="linear-gradient(135deg, #082142"] h2,
+[style*="linear-gradient(135deg, #082142"] h3,
+[style*="linear-gradient(135deg, #082142"] h4,
+[style*="linear-gradient(135deg, #082142"] h5,
+[style*="linear-gradient(135deg, #082142"] h6,
+[style*="linear-gradient(135deg, #082142"] strong,
+[style*="rgba(17,24,39"] h1,
+[style*="rgba(17,24,39"] h2,
+[style*="rgba(17,24,39"] strong {
+  color: #ffffff !important;
+}
+
+/* -------------------------------------------------------------------
+   FOOTER (COMMANDING MRDU INSTITUTIONAL NAVY)
+   ------------------------------------------------------------------- */
+.footer {
+  background: var(--mrdu-navy-dark);
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(90deg, #f95700 0%, #00a651 50%, #f95700 100%) 1;
+  padding: 4rem 0 2rem;
+  margin-top: auto;
+  color: #cbd5e1;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.footer-brand h4 {
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+  color: #ffffff;
+}
+
+.footer-brand p {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  max-width: 320px;
+}
+
+.footer-brand .brand-logo-img {
+  margin-bottom: 0.75rem;
+}
+
+.footer-links h5 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1.15rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.footer-links ul {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 0.55rem;
+}
+
+.footer-links a {
+  color: #94a3b8;
+  font-size: 0.88rem;
+}
+
+.footer-links a:hover {
+  color: #ff914d;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #64748b;
+  font-size: 0.85rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* -------------------------------------------------------------------
+   MEDIA QUERIES (RESPONSIVENESS)
+   ------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--mrdu-navy);
+    flex-direction: column;
+    padding: 1.5rem;
+    border-bottom: 2px solid var(--mrdu-orange);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .mobile-only-auth {
+    display: block !important;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .mobile-only-auth .btn {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-mobile-toggle {
+    display: block;
+  }
+
+  .grid-2, .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  /* Mobile Heading Readability & Scaling */
+  h1 {
+    font-size: 1.85rem !important;
+    line-height: 1.25 !important;
+  }
+
+  h2 {
+    font-size: 1.45rem !important;
+    line-height: 1.3 !important;
+  }
+
+  h3 {
+    font-size: 1.2rem !important;
+    line-height: 1.35 !important;
+  }
+
+  h4 {
+    font-size: 1.05rem !important;
+  }
+
+  .hero-title {
+    font-size: 2.35rem !important;
+    line-height: 1.18 !important;
+  }
+
+  .card-title {
+    font-size: 1.2rem !important;
+  }
+}

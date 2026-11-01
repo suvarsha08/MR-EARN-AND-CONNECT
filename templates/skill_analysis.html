@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}My Skills Analysis - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <!-- Header Banner -->
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge badge-primary">Analytical Engine</span>
+        <span class="badge badge-demo">Pure Python &bull; Transparent Logic &bull; NO AI</span>
+      </div>
+      <h1 style="font-size: 2.35rem; font-weight: 800; color: var(--text-heading-dark); margin-top: 0.35rem;">📊 My Skills Analysis</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Comprehensive breakdown of your student portfolio health, self-reported proficiencies, and asset metrics.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('skills') }}" class="btn btn-outline btn-sm">🧑‍💻 Manage Skills</a>
+      <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-sm">💼 Explore Job Compatibility</a>
+    </div>
+  </div>
+
+  <!-- SECTION 1: PROFILE COMPLETION CARD -->
+  <div class="card dark-hero-card" style="padding: 2.5rem 2rem; margin-bottom: 2.5rem; background: linear-gradient(135deg, rgba(8,33,66,0.95) 0%, rgba(16,52,96,0.95) 100%); border: 2px solid rgba(249,87,0,0.35);">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+      <div>
+        <span class="badge badge-primary">Portfolio Readiness</span>
+        <h2 style="font-size: 1.9rem; font-weight: 800; color: #ffffff; margin-top: 0.3rem;">Profile Completion Score</h2>
+        <p style="color: #cbd5e1; font-size: 0.9rem;">
+          Calculated transparently across 7 key portfolio sections. Higher completion increases recruiter engagement.
+        </p>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 3.2rem; font-weight: 800; color: #4ade80; font-family: var(--font-heading); line-height: 1;">
+          {{ analysis.percentage }}%
+        </div>
+        <span style="font-size: 0.88rem; color: #86efac; font-weight: 800;">
+          {% if analysis.percentage >= 80 %}Excellent Readiness{% elif analysis.percentage >= 50 %}Good Progress{% else %}Needs More Detail{% endif %}
+        </span>
+      </div>
+    </div>
+
+    <!-- Main Progress Bar -->
+    <div class="progress-bar-container" style="height: 16px;">
+      <div class="progress-bar-fill" style="width: {{ analysis.percentage }}%;"></div>
+    </div>
+
+    <!-- Breakdown Checklist Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2rem;">
+      {% for item in analysis.breakdown %}
+        <div style="background: rgba(255,255,255,0.08); border: 1px solid {% if item.completed %}rgba(16,185,129,0.4){% else %}rgba(255,255,255,0.15){% endif %}; padding: 1rem; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem;">{% if item.completed %}✅{% else %}⏳{% endif %}</span>
+            <div>
+              <div style="font-size: 0.92rem; font-weight: 750; color: #ffffff;">{{ item.title }}</div>
+              <small style="color: #cbd5e1;">Weight: {{ item.points }}/{{ item.max }} pts</small>
+            </div>
+          </div>
+          <span class="badge {% if item.completed %}badge-success{% else %}badge-neutral{% endif %}">
+            {% if item.completed %}Done{% else %}Incomplete{% endif %}
+          </span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- SECTION 2: SKILL & ASSET STATISTICS -->
+  <div style="margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-heading-dark); margin-bottom: 0.5rem;">📈 Platform Skill &amp; Asset Statistics</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Summary count of all documented competencies and achievements</p>
+
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(8,33,66,0.08); color: var(--mrdu-navy);">🧑‍💻</div>
+        <div class="stat-number">{{ total_skills }}</div>
+        <div class="stat-label">Total Skills Documented</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(249,87,0,0.1); color: var(--mrdu-orange);">💻</div>
+        <div class="stat-number">{{ tech_count }}</div>
+        <div class="stat-label">Technical Skills</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(0,166,81,0.1); color: var(--mrdu-green);">✍️</div>
+        <div class="stat-number">{{ digital_count }}</div>
+        <div class="stat-label">Digital &amp; Academic</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(245,158,11,0.1); color: #d97706;">🗣️</div>
+        <div class="stat-number">{{ soft_count }}</div>
+        <div class="stat-label">Soft Skills</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(8,33,66,0.08); color: var(--mrdu-navy);">🛠️</div>
+        <div class="stat-number">{{ proj_count }}</div>
+        <div class="stat-label">Student Projects</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(249,87,0,0.1); color: var(--mrdu-orange);">📜</div>
+        <div class="stat-number">{{ cert_count }}</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(245,158,11,0.1); color: #d97706;">🏆</div>
+        <div class="stat-number">{{ ach_count }}</div>
+        <div class="stat-label">Achievements &amp; Awards</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: rgba(0,166,81,0.1); color: var(--mrdu-green);">💰</div>
+        <div class="stat-number">{{ service_count }}</div>
+        <div class="stat-label">Services Offered</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: SKILL LEVEL VISUALIZATION BARS -->
+  <div class="card" style="padding: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-heading-dark);">📊 Skill Level Visualization</h2>
+      <span class="badge badge-demo">Self-reported skill levels &bull; Not official assessments</span>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+      Formula mapping: <strong>Beginner = 40%</strong> &bull; <strong>Intermediate = 70%</strong> &bull; <strong>Advanced = 90%</strong>
+    </p>
+
+    {% if skills %}
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for s in skills %}
+          <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-md);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <div>
+                <strong style="color: var(--text-heading-dark); font-size: 1.05rem; font-weight: 750;">{{ s.name }}</strong>
+                <span style="font-size: 0.82rem; color: var(--text-subtle); margin-left: 6px;">({{ s.category }})</span>
+              </div>
+              <div style="text-align: right;">
+                <span class="badge {% if s.level == 'Advanced' %}badge-success{% elif s.level == 'Intermediate' %}badge-primary{% else %}badge-neutral{% endif %}">
+                  {{ s.level }}
+                </span>
+                <span style="font-weight: 800; font-size: 0.95rem; color: var(--mrdu-navy); margin-left: 6px;">{{ s.percentage }}%</span>
+              </div>
+            </div>
+
+            <div class="progress-bar-container" style="height: 8px;">
+              <div class="progress-bar-fill {% if s.level == 'Advanced' %}progress-bar-emerald{% endif %}" style="width: {{ s.percentage }}%;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.72rem; color: var(--text-subtle);">
+              <span>Beginner (40%)</span>
+              <span>Intermediate (70%)</span>
+              <span>Advanced (90%)</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        <p>No skills added yet.</p>
+        <a href="{{ url_for('skills') }}" class="btn btn-primary btn-sm" style="margin-top: 0.75rem;">Add Skills Now</a>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

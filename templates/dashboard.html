@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <!-- =============================================================
+       STUDENT DASHBOARD
+       ============================================================= -->
+  {% if role == 'student' %}
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-primary">Student Dashboard</span>
+        <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">Welcome, {{ current_user.name }}! 👋</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          {{ profile.course or 'B.Tech CSE-AIML' }} &bull; {{ profile.year or '1st Year' }} &bull; {{ profile.college }}
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="{{ url_for('my_profile') }}" class="btn btn-outline btn-sm">👁️ View Public Portfolio</a>
+        <a href="{{ url_for('edit_profile') }}" class="btn btn-outline btn-sm">✏️ Edit Profile</a>
+        <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm">💰 Offer Skill to Earn</a>
+      </div>
+    </div>
+
+    <!-- Student Top Metrics Row -->
+    <div class="grid-3" style="margin-bottom: 2rem;">
+      <!-- Profile & Skill Analysis Card -->
+      <div class="card" style="border-left: 4px solid var(--primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading-dark);">📊 Profile Completion</h3>
+          <span style="font-size: 1.3rem; font-weight: 800; color: var(--text-heading-dark);">{{ analysis.percentage }}%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: {{ analysis.percentage }}%;"></div>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+          {{ analysis.skill_count }} skills, {{ analysis.proj_count }} projects, {{ analysis.ach_count }} achievements documented.
+        </p>
+        <div style="margin-top: 1rem;">
+          <a href="{{ url_for('skill_analysis') }}" class="btn btn-outline-primary btn-sm" style="width: 100%;">
+            Open Detailed Skill Analysis &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Demo Earnings Card -->
+      <div class="card" style="border-left: 4px solid #10b981; background: linear-gradient(135deg, rgba(16,185,129,0.08) 0%, var(--bg-card) 100%);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading-dark);">💰 Demo Earnings</h3>
+          <span class="badge badge-demo">Prototype</span>
+        </div>
+        <div style="font-size: 2.4rem; font-weight: 800; color: var(--mrdu-green-dark); font-family: var(--font-heading);">
+          ₹{{ "%.0f"|format(demo_earnings) }}
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted);">
+          {{ completed_orders_count }} completed orders &bull; {{ pending_orders_count }} in progress
+        </p>
+        <div style="margin-top: 1rem;">
+          <a href="{{ url_for('my_earnings') }}" class="btn btn-secondary btn-sm" style="width: 100%;">
+            View Earnings Dashboard &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Portals Card -->
+      <div class="card" style="border-left: 4px solid #f59e0b;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-heading-dark); margin-bottom: 0.75rem;">⚡ Quick Navigation</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <a href="{{ url_for('skills') }}" class="btn btn-outline btn-sm" style="justify-content: flex-start;">
+            <span>🧑‍💻 Manage Skills ({{ skills|length }})</span>
+          </a>
+          <a href="{{ url_for('jobs') }}" class="btn btn-outline btn-sm" style="justify-content: flex-start;">
+            <span>💼 Search Jobs</span>
+          </a>
+          <a href="{{ url_for('internships') }}" class="btn btn-outline btn-sm" style="justify-content: flex-start;">
+            <span>🎓 Search Internships</span>
+          </a>
+          <a href="{{ url_for('opportunities') }}" class="btn btn-outline btn-sm" style="justify-content: flex-start;">
+            <span>🚀 Hackathons &amp; Ideathons</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Applications Section -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">📋 My Recent Applications</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Live status tracking for job &amp; internship applications</p>
+        </div>
+        <a href="{{ url_for('my_applications') }}" class="btn btn-outline btn-sm">View All &rarr;</a>
+      </div>
+
+      {% if applications %}
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-subtle);">
+                <th style="padding: 0.75rem 0.5rem;">Position</th>
+                <th style="padding: 0.75rem 0.5rem;">Company</th>
+                <th style="padding: 0.75rem 0.5rem;">Type</th>
+                <th style="padding: 0.75rem 0.5rem;">Applied Date</th>
+                <th style="padding: 0.75rem 0.5rem;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app_item in applications %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 0.85rem 0.5rem; font-weight: 600; color: #ffffff;">{{ app_item.opp_title }}</td>
+                  <td style="padding: 0.85rem 0.5rem; color: #a5b4fc;">{{ app_item.company_name }}</td>
+                  <td style="padding: 0.85rem 0.5rem;"><span class="badge badge-neutral">{{ app_item.type }}</span></td>
+                  <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ app_item.applied_at[:10] }}</td>
+                  <td style="padding: 0.85rem 0.5rem;">
+                    {% if app_item.status == 'Applied' %}
+                      <span class="badge badge-info">Applied</span>
+                    {% elif app_item.status == 'Under Review' %}
+                      <span class="badge badge-warning">Under Review</span>
+                    {% elif app_item.status == 'Shortlisted' %}
+                      <span class="badge badge-primary">Shortlisted</span>
+                    {% elif app_item.status == 'Selected' %}
+                      <span class="badge badge-success">Selected 🎉</span>
+                    {% else %}
+                      <span class="badge badge-danger">Rejected</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          <p>You haven't submitted any job or internship applications yet.</p>
+          <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-sm" style="margin-top: 0.75rem;">Browse Open Jobs</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- My Services & Active Customer Orders -->
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">📦 Incoming Campus Orders</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Orders requested by students/faculty</p>
+          </div>
+          <a href="{{ url_for('orders') }}" class="btn btn-outline btn-sm">Manage Orders</a>
+        </div>
+
+        {% if my_orders %}
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for ord in my_orders %}
+              <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 700; color: #ffffff;">{{ ord.service_title }}</div>
+                  <small style="color: var(--text-muted);">Client: {{ ord.customer_name }} &bull; ₹{{ "%.0f"|format(ord.amount) }}</small>
+                </div>
+                <div>
+                  {% if ord.status == 'Requested' %}
+                    <span class="badge badge-warning">Requested</span>
+                  {% elif ord.status == 'Accepted' or ord.status == 'In Progress' %}
+                    <span class="badge badge-info">{{ ord.status }}</span>
+                  {% elif ord.status == 'Completed' %}
+                    <span class="badge badge-success">Completed</span>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            <p>No customer orders received yet.</p>
+            <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm" style="margin-top: 0.75rem;">+ Create a Service</a>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">💰 My Listed Services</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem;">Skills you are currently monetizing</p>
+          </div>
+          <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm">+ Add Service</a>
+        </div>
+
+        {% if my_services %}
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for srv in my_services %}
+              <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <a href="{{ url_for('service_details', service_id=srv.id) }}" style="font-weight: 700; color: #ffffff;">{{ srv.title }}</a>
+                  <div><small style="color: #34d399; font-weight: 700;">₹{{ "%.0f"|format(srv.price) }}</small> &bull; <small style="color: var(--text-subtle);">{{ srv.delivery_time }}</small></div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge badge-primary">{{ srv.availability }}</span>
+                  <a href="{{ url_for('edit_service', service_id=srv.id) }}" class="btn btn-outline btn-sm" style="padding: 2px 8px;">Edit</a>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+            <p>You have not offered any services yet.</p>
+            <p style="font-size: 0.82rem; color: var(--text-subtle); margin-top: 4px;">Offer Record Writing, Notes Prep, PPT Design, or Python scripts!</p>
+            <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm" style="margin-top: 0.75rem;">List Your First Service</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+  <!-- =============================================================
+       EMPLOYER DASHBOARD
+       ============================================================= -->
+  {% elif role == 'employer' %}
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-info">Employer Recruitment Portal</span>
+        <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">{{ company.company_name }}</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">📍 {{ company.location }} &bull; Connecting with talented students from MRDU Tirupati</p>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="{{ url_for('create_job') }}" class="btn btn-primary btn-sm">+ Post New Job</a>
+        <a href="{{ url_for('create_internship') }}" class="btn btn-secondary btn-sm">+ Post Internship</a>
+      </div>
+    </div>
+
+    <!-- Employer Metrics Row -->
+    <div class="grid-3" style="margin-bottom: 2rem;">
+      <div class="card">
+        <h4 style="color: var(--text-heading-medium); font-size: 0.95rem; font-weight: 750;">Active Jobs</h4>
+        <div style="font-size: 2.2rem; font-weight: 800; color: var(--text-heading-dark); margin-top: 0.25rem;">{{ my_jobs|length }}</div>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--text-heading-medium); font-size: 0.95rem; font-weight: 750;">Active Internships</h4>
+        <div style="font-size: 2.2rem; font-weight: 800; color: var(--mrdu-navy); margin-top: 0.25rem;">{{ my_internships|length }}</div>
+      </div>
+      <div class="card">
+        <h4 style="color: var(--text-heading-medium); font-size: 0.95rem; font-weight: 750;">Total Applicants</h4>
+        <div style="font-size: 2.2rem; font-weight: 800; color: var(--mrdu-green-dark); margin-top: 0.25rem;">{{ applicants|length }}</div>
+      </div>
+    </div>
+
+    <!-- Recent Candidate Applications Table -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">👥 Student Applicants</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Review candidate portfolios and update hiring status</p>
+        </div>
+        <a href="{{ url_for('my_applications') }}" class="btn btn-outline btn-sm">Full Applicants Table &rarr;</a>
+      </div>
+
+      {% if applicants %}
+        <div style="overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-subtle);">
+                <th style="padding: 0.75rem 0.5rem;">Candidate</th>
+                <th style="padding: 0.75rem 0.5rem;">Applied Position</th>
+                <th style="padding: 0.75rem 0.5rem;">Academic Year</th>
+                <th style="padding: 0.75rem 0.5rem;">Status</th>
+                <th style="padding: 0.75rem 0.5rem;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app_item in applicants %}
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                  <td style="padding: 0.85rem 0.5rem;">
+                    <a href="{{ url_for('view_profile', user_id=app_item.user_id) }}" style="font-weight: 700; color: #ffffff;">
+                      {{ app_item.student_name }}
+                    </a>
+                    <div><small style="color: var(--text-subtle);">{{ app_item.student_email }}</small></div>
+                  </td>
+                  <td style="padding: 0.85rem 0.5rem; color: #a5b4fc; font-weight: 600;">{{ app_item.position_title }}</td>
+                  <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ app_item.course or 'B.Tech' }} ({{ app_item.year or 'Student' }})</td>
+                  <td style="padding: 0.85rem 0.5rem;">
+                    <span class="badge badge-info">{{ app_item.status }}</span>
+                  </td>
+                  <td style="padding: 0.85rem 0.5rem;">
+                    <form method="POST" action="{{ url_for('update_application_status', app_id=app_item.id) }}" style="display: flex; gap: 4px;">
+                      <select name="status" class="form-control" style="padding: 0.3rem 0.5rem; font-size: 0.8rem; width: auto;">
+                        <option value="Applied" {% if app_item.status == 'Applied' %}selected{% endif %}>Applied</option>
+                        <option value="Under Review" {% if app_item.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+                        <option value="Shortlisted" {% if app_item.status == 'Shortlisted' %}selected{% endif %}>Shortlisted</option>
+                        <option value="Selected" {% if app_item.status == 'Selected' %}selected{% endif %}>Selected</option>
+                        <option value="Rejected" {% if app_item.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                      </select>
+                      <button type="submit" class="btn btn-outline-primary btn-sm" style="padding: 0.3rem 0.6rem;">Update</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+          <p>No student applications received yet.</p>
+        </div>
+      {% endif %}
+    </div>
+
+  <!-- =============================================================
+       CUSTOMER DASHBOARD
+       ============================================================= -->
+  {% elif role == 'customer' %}
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-success">Customer &amp; Faculty Portal</span>
+        <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">Welcome, {{ current_user.name }}!</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Request academic services, laboratory record preparation, and technical support from MRDU students.</p>
+      </div>
+      <a href="{{ url_for('services') }}" class="btn btn-secondary btn-sm">🛒 Browse Skill Marketplace</a>
+    </div>
+
+    <!-- Active Orders Section -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">📦 My Requested Orders</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Track progress and rate completed services</p>
+        </div>
+      </div>
+
+      {% if my_orders %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          {% for ord in my_orders %}
+            <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-md);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                  <h4 style="font-size: 1.15rem; font-weight: 750; color: var(--text-heading-dark);">{{ ord.service_title }}</h4>
+                  <p style="color: var(--text-muted); font-size: 0.85rem;">
+                    Student Provider: <strong style="color: var(--text-heading-dark);">{{ ord.provider_name }}</strong> &bull; Amount: <strong style="color: var(--mrdu-green-dark); font-weight: 800;">₹{{ "%.0f"|format(ord.amount) }}</strong>
+                  </p>
+                  <p style="color: var(--text-subtle); font-size: 0.82rem; margin-top: 4px;">Requirements: "{{ ord.requirements }}"</p>
+                </div>
+                <div style="text-align: right;">
+                  <span class="badge {% if ord.status == 'Completed' %}badge-success{% elif ord.status == 'Requested' %}badge-warning{% else %}badge-info{% endif %}">
+                    {{ ord.status }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Rating Form if Completed -->
+              {% if ord.status == 'Completed' %}
+                <div style="margin-top: 1rem; padding-top: 0.85rem; border-top: 1px solid var(--border-subtle);">
+                  {% if ord.rating %}
+                    <div style="color: #fbbf24; font-size: 0.95rem;">
+                      Your Rating: {% for i in range(ord.rating) %}★{% endfor %}
+                      <span style="color: var(--text-muted); font-size: 0.85rem; margin-left: 8px;">"{{ ord.review }}"</span>
+                    </div>
+                  {% else %}
+                    <form method="POST" action="{{ url_for('rate_order', order_id=ord.id) }}" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                      <span style="font-size: 0.85rem; font-weight: 600; color: #ffffff;">Rate this service:</span>
+                      <select name="rating" class="form-control" style="width: auto; padding: 0.3rem 0.5rem; font-size: 0.85rem;">
+                        <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                        <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
+                        <option value="3">⭐⭐⭐ (3 Stars)</option>
+                        <option value="2">⭐⭐ (2 Stars)</option>
+                        <option value="1">⭐ (1 Star)</option>
+                      </select>
+                      <input type="text" name="review" class="form-control" placeholder="Write a brief review..." style="flex: 1; min-width: 200px; padding: 0.3rem 0.6rem; font-size: 0.85rem;">
+                      <button type="submit" class="btn btn-secondary btn-sm">Submit Review</button>
+                    </form>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+          <p>You have not requested any campus services yet.</p>
+          <a href="{{ url_for('services') }}" class="btn btn-secondary btn-sm" style="margin-top: 0.75rem;">Explore Skill Marketplace</a>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

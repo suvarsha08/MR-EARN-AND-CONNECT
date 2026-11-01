@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Student Projects Showcase - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-primary">Technical Showcase</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🛠️ Student Projects Showcase</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Explore real-world software, AI prototypes, and campus tools built by MRDU undergraduate engineering students.
+      </p>
+    </div>
+
+    {% if current_user and current_user.role == 'student' %}
+      <a href="{{ url_for('add_project') }}" class="btn btn-primary btn-sm">+ Showcase Your Project</a>
+    {% endif %}
+  </div>
+
+  <!-- Search & Category Filters -->
+  <form method="GET" action="{{ url_for('projects') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search projects (Python, Flask, AI, Web)..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 200px;">
+      <select name="category" class="form-control">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_category %}
+      <a href="{{ url_for('projects') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Projects Grid -->
+  {% if projects %}
+    <div class="grid-2">
+      {% for proj in projects %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-header" style="margin-bottom: 0.75rem;">
+              <span class="badge badge-info">{{ proj.category }}</span>
+              <span class="badge badge-success">{{ proj.status }}</span>
+            </div>
+
+            <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.35rem;">{{ proj.title }}</h3>
+            
+            <p style="color: var(--text-heading-medium); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem;">
+              Author: 
+              <a href="{{ url_for('view_profile', user_id=proj.student_id) }}" style="color: var(--text-heading-dark); font-weight: 750;">
+                {{ proj.student_name }}
+              </a>
+              {% if proj.course %}&bull; <span style="color: var(--text-subtle);">{{ proj.course }} ({{ proj.year }})</span>{% endif %}
+            </p>
+
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;">
+              {{ proj.description }}
+            </p>
+
+            <!-- Tech Stack Chips -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem;">
+              {% for tech in proj.technologies.split(',') %}
+                <span class="skill-pill skill-pill-neutral">⚡ {{ tech.strip() }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.85rem; margin-top: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <span style="font-size: 0.82rem; color: var(--text-subtle);">
+              👥 Team: {{ proj.team_members or 'Individual Project' }}
+            </span>
+            <div style="display: flex; gap: 6px;">
+              {% if proj.project_link %}
+                <a href="{{ proj.project_link }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                  🔗 GitHub / Demo &rarr;
+                </a>
+              {% endif %}
+              {% if current_user and (current_user.id == proj.student_id or current_user.role == 'admin') %}
+                <form method="POST" action="{{ url_for('delete_project', proj_id=proj.id) }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm" style="color: #f87171; border-color: rgba(248,113,113,0.3);" onclick="return confirm('Delete project?');">
+                    🗑️
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛠️</div>
+      <h3 style="font-size: 1.4rem;">No projects found</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Be the first to showcase your engineering innovations and campus tools!
+      </p>
+      {% if current_user and current_user.role == 'student' %}
+        <a href="{{ url_for('add_project') }}" class="btn btn-primary btn-sm">+ Add Project</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

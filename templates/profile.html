@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}{{ target_user.name }} - Student Portfolio & Profile | MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+  
+  <!-- Student Portfolio Header Banner -->
+  <div class="card" style="padding: 2.5rem 2rem; margin-bottom: 2rem; background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(17,24,39,0.95) 100%); border-color: rgba(99,102,241,0.3);">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem;">
+      
+      <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+        <!-- Avatar / Photo -->
+        <div style="width: 100px; height: 100px; border-radius: 20px; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #ffffff; font-weight: 800; box-shadow: var(--shadow-glow); border: 2px solid rgba(255,255,255,0.1);">
+          {{ target_user.name[0] }}
+        </div>
+
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <h1 style="font-size: 2.2rem; margin-bottom: 0;">{{ target_user.name }}</h1>
+            <span class="badge badge-primary">{{ target_user.role.title() }}</span>
+            {% if profile and profile.cgpa %}
+              <span class="badge badge-success">CGPA: {{ "%.2f"|format(profile.cgpa) }}</span>
+            {% endif %}
+          </div>
+
+          <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 1.05rem; margin-top: 0.25rem;">
+            {{ profile.course or 'B.Tech Student' }} &bull; {{ profile.year or 'Undergraduate' }} &bull; {{ profile.department or 'Computer Science & Engineering' }}
+          </p>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+            🏛️ {{ profile.college or 'Malla Reddy Deemed to be University, Tirupati' }}
+          </p>
+
+          <div style="display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; font-size: 0.85rem; color: var(--text-subtle);">
+            <span>📧 {{ target_user.email }}</span>
+            {% if target_user.phone %}<span>📞 {{ target_user.phone }}</span>{% endif %}
+            {% if profile and profile.preferred_location %}<span>📍 Pref: {{ profile.preferred_location }}</span>{% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end;">
+        {% if current_user and current_user.id == target_user.id %}
+          <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary btn-sm">✏️ Edit Portfolio</a>
+          <a href="{{ url_for('skill_analysis') }}" class="btn btn-primary btn-sm">🎯 View Skill Compatibility</a>
+        {% elif current_user %}
+          <form method="POST" action="{{ url_for('toggle_connection', target_id=target_user.id) }}">
+            <button type="submit" class="btn {% if is_connected %}btn-outline{% else %}btn-primary{% endif %} btn-sm">
+              {% if is_connected %}🤝 Connected (Remove){% else %}🤝 Connect{% endif %}
+            </button>
+          </form>
+        {% endif %}
+
+        {% if review_count > 0 %}
+          <div style="background: rgba(0,0,0,0.3); padding: 0.4rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-subtle); margin-top: 0.5rem;">
+            <span style="color: #fbbf24; font-weight: 800;">★ {{ avg_rating }}</span>
+            <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 4px;">({{ review_count }} reviews)</span>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  <div class="grid-3" style="align-items: flex-start;">
+    
+    <!-- Left Column: Bio & Academic Info -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- About Me Card -->
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom: 0.75rem;">📝 About Me</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
+          {{ profile.bio or 'No personal bio added yet. Student is currently building their academic profile.' }}
+        </p>
+
+        {% if profile and profile.resume %}
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+            <a href="{{ profile.resume }}" target="_blank" class="btn btn-outline-primary btn-sm" style="width: 100%;">
+              📄 View Student Resume / CV
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Academic Background Card -->
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom: 0.75rem;">🎓 Academic Information</h3>
+        <ul style="list-style: none; font-size: 0.88rem; color: var(--text-muted); display: flex; flex-direction: column; gap: 0.6rem;">
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Institution:</strong> {{ profile.college or 'MRDU Tirupati' }}</li>
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Department:</strong> {{ profile.department or 'N/A' }}</li>
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Program:</strong> {{ profile.course or 'N/A' }}</li>
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Current Year:</strong> {{ profile.year or 'N/A' }}</li>
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Prior Education:</strong> {{ profile.education or 'N/A' }}</li>
+          <li><strong style="color: var(--text-heading-dark); font-weight: 750;">Preferred Roles:</strong> {{ profile.preferred_job_type or 'Internships & Full-time' }}</li>
+        </ul>
+      </div>
+
+      <!-- Services Offered by Student -->
+      {% if services %}
+      <div class="card" style="border-color: rgba(16,185,129,0.35);">
+        <h3 class="card-title" style="margin-bottom: 0.75rem;">💰 Skill Marketplace Services</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for srv in services %}
+            <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 0.75rem; border-radius: var(--radius-sm);">
+              <a href="{{ url_for('service_details', service_id=srv.id) }}" class="card-title-link" style="font-size: 0.95rem;">{{ srv.title }}</a>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <span style="color: var(--mrdu-green-dark); font-weight: 800; font-size: 0.95rem;">₹{{ "%.0f"|format(srv.price) }}</span>
+                <span style="font-size: 0.78rem; color: var(--text-subtle);">⏱️ {{ srv.delivery_time }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Right 2 Columns: Skills, Projects, Achievements -->
+    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Skills Matrix Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🧑‍💻 Documented Skills Portfolio</h3>
+          <small class="badge badge-demo">Self-reported skill levels</small>
+        </div>
+
+        <!-- Technical Skills -->
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.92rem; color: var(--text-heading-dark); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+            Technical Skills
+          </h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            {% for s in skills if s.category == 'Technical' %}
+              <span class="skill-pill skill-pill-matched" title="Level: {{ s.level }}">
+                ✔ {{ s.name }} <small style="opacity: 0.75;">({{ s.level }})</small>
+              </span>
+            {% else %}
+              <span style="color: var(--text-subtle); font-size: 0.85rem;">No technical skills listed yet.</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Digital Skills -->
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.92rem; color: var(--text-heading-dark); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+            Digital &amp; Academic Skills
+          </h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            {% for s in skills if s.category == 'Digital' %}
+              <span class="skill-pill skill-pill-neutral" title="Level: {{ s.level }}">
+                ✔ {{ s.name }} <small style="opacity: 0.75;">({{ s.level }})</small>
+              </span>
+            {% else %}
+              <span style="color: var(--text-subtle); font-size: 0.85rem;">No digital skills listed yet.</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Soft Skills -->
+        <div>
+          <h4 style="font-size: 0.92rem; color: var(--text-heading-dark); font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+            Soft &amp; Communication Skills
+          </h4>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            {% for s in skills if s.category == 'Soft' %}
+              <span class="skill-pill skill-pill-neutral" title="Level: {{ s.level }}">
+                ✔ {{ s.name }} <small style="opacity: 0.75;">({{ s.level }})</small>
+              </span>
+            {% else %}
+              <span style="color: var(--text-subtle); font-size: 0.85rem;">No soft skills listed yet.</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Projects Showcase -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🛠️ Student Projects Showcase</h3>
+          {% if current_user and current_user.id == target_user.id %}
+            <a href="{{ url_for('add_project') }}" class="btn btn-outline-primary btn-sm">+ Add Project</a>
+          {% endif %}
+        </div>
+
+        {% if projects %}
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for proj in projects %}
+              <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-md);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+                  <h4 style="font-size: 1.15rem; font-weight: 750; color: var(--text-heading-dark);">{{ proj.title }}</h4>
+                  <span class="badge badge-info">{{ proj.status }}</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.5; margin-bottom: 0.75rem;">
+                  {{ proj.description }}
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem;">
+                  {% for tech in proj.technologies.split(',') %}
+                    <span class="skill-pill skill-pill-neutral">⚡ {{ tech.strip() }}</span>
+                  {% endfor %}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--text-subtle);">
+                  <span>Team: {{ proj.team_members or 'Individual' }}</span>
+                  {% if proj.project_link %}
+                    <a href="{{ proj.project_link }}" target="_blank" style="color: var(--mrdu-navy); font-weight: 700;">🔗 View Code / Demo &rarr;</a>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem;">
+            No projects published yet.
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- Achievements Timeline -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">🏆 Honors, Certifications &amp; Achievements</h3>
+          {% if current_user and current_user.id == target_user.id %}
+            <a href="{{ url_for('add_achievement') }}" class="btn btn-outline-primary btn-sm">+ Add Achievement</a>
+          {% endif %}
+        </div>
+
+        {% if achievements %}
+          <div class="timeline" style="margin-top: 1rem;">
+            {% for ach in achievements %}
+              <div class="timeline-item">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="badge badge-warning">{{ ach.category }}</span>
+                  <small style="color: var(--text-subtle);">{{ ach.date }}</small>
+                </div>
+                <h4 style="font-size: 1.1rem; font-weight: 750; color: var(--text-heading-dark); margin-top: 0.35rem;">{{ ach.title }}</h4>
+                <p style="color: var(--text-heading-medium); font-size: 0.88rem; font-weight: 700;">Issued by: {{ ach.organization }}</p>
+                {% if ach.description %}
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">{{ ach.description }}</p>
+                {% endif %}
+                {% if ach.proof_link %}
+                  <div style="margin-top: 6px;">
+                    <a href="{{ ach.proof_link }}" target="_blank" style="font-size: 0.85rem; color: var(--mrdu-green-dark); font-weight: 700;">🔗 Verify Certificate / Proof &rarr;</a>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem;">
+            No achievements or certifications recorded yet.
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- Customer Reviews & Ratings -->
+      {% if reviews %}
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom: 1rem;">⭐ Client Reviews &amp; Testimonials</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for r in reviews %}
+            <div style="background: var(--bg-hover); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: var(--text-heading-dark); font-size: 0.95rem; font-weight: 750;">{{ r.customer_name }}</strong>
+                <span style="color: #b45309;">{% for i in range(r.rating) %}★{% endfor %}</span>
+              </div>
+              <small style="color: var(--text-muted); font-weight: 600;">Service: {{ r.service_title }}</small>
+              <p style="color: var(--text-main); font-size: 0.9rem; margin-top: 0.4rem; font-style: italic;">
+                "{{ r.review }}"
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

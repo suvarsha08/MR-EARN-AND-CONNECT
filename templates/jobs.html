@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Job Portal - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-primary">Employment Portal</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">💼 Career &amp; Graduate Jobs</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Explore opportunities from hiring partners. Every card features transparent <strong>Skill Compatibility Analysis</strong> for logged-in students.
+      </p>
+    </div>
+
+    {% if current_user and (current_user.role == 'employer' or current_user.role == 'admin') %}
+      <a href="{{ url_for('create_job') }}" class="btn btn-primary btn-sm">+ Post New Job</a>
+    {% endif %}
+  </div>
+
+  <!-- Search & Filter Bar -->
+  <form method="GET" action="{{ url_for('jobs') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search by title, skills (Python, SQL), company..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 180px;">
+      <select name="category" class="form-control">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="min-width: 160px;">
+      <select name="job_type" class="form-control">
+        <option value="">All Job Types</option>
+        <option value="Full-time" {% if selected_job_type == 'Full-time' %}selected{% endif %}>Full-time</option>
+        <option value="Part-time" {% if selected_job_type == 'Part-time' %}selected{% endif %}>Part-time</option>
+        <option value="Remote" {% if selected_job_type == 'Remote' %}selected{% endif %}>Remote</option>
+        <option value="Hybrid" {% if selected_job_type == 'Hybrid' %}selected{% endif %}>Hybrid</option>
+      </select>
+    </div>
+
+    <div style="min-width: 160px;">
+      <input type="text" name="location" class="form-control" placeholder="Location..." value="{{ selected_location }}">
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_category or selected_job_type or selected_location %}
+      <a href="{{ url_for('jobs') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Job Cards Grid -->
+  {% if jobs %}
+    <div class="grid-2">
+      {% for job in jobs %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-header">
+              <div>
+                <span class="badge badge-primary">{{ job.category }}</span>
+                <h3 style="font-size: 1.25rem; margin-top: 0.4rem;">
+                  <a href="{{ url_for('job_details', job_id=job.id) }}" class="card-title-link">{{ job.title }}</a>
+                </h3>
+                <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem;">🏢 {{ job.company_name }}</p>
+              </div>
+
+              <div style="text-align: right;">
+                <span class="badge badge-success">{{ job.salary }}</span>
+                <!-- Skill Compatibility Pill for Logged-In Students -->
+                {% if job.compat_score is not none %}
+                  <div style="margin-top: 6px;">
+                    <span class="badge {% if job.compat_score >= 75 %}badge-success{% elif job.compat_score >= 40 %}badge-warning{% else %}badge-neutral{% endif %}" title="Calculated using transparent Python skill comparison">
+                      🎯 {{ job.compat_score }}% Match
+                    </span>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1rem;">
+              {{ job.description[:140] }}...
+            </p>
+
+            <!-- Skills Required Chips -->
+            <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem;">
+              {% for skill in job.skills.split(',') %}
+                <span class="skill-pill skill-pill-neutral">⚡ {{ skill.strip() }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 1rem; margin-top: auto;">
+            <div style="font-size: 0.82rem; color: var(--text-subtle);">
+              <span>📍 {{ job.location }}</span> &bull; 
+              <span>{{ job.job_type }}</span>
+            </div>
+            <a href="{{ url_for('job_details', job_id=job.id) }}" class="btn btn-primary btn-sm">
+              View Details &amp; Apply &rarr;
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔍</div>
+      <h3 style="font-size: 1.4rem;">No matching jobs found</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Try adjusting your search terms, removing filters, or explore our internships portal.
+      </p>
+      <a href="{{ url_for('jobs') }}" class="btn btn-outline btn-sm">Clear All Filters</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

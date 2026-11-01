@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Post Internship - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 780px; padding-top: 1.5rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div>
+        <h2 style="font-size: 1.8rem;">🎓 Post an Internship Opening</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Recruit undergraduate interns from MRDU Tirupati for live projects</p>
+      </div>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-sm">&larr; Dashboard</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('create_internship') }}">
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Internship Title *</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Python & Backend Development Intern" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="duration">Duration *</label>
+          <select id="duration" name="duration" class="form-control">
+            <option value="1 Month">1 Month</option>
+            <option value="2 Months">2 Months</option>
+            <option value="3 Months" selected>3 Months</option>
+            <option value="6 Months">6 Months</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="stipend">Monthly Stipend *</label>
+          <input type="text" id="stipend" name="stipend" class="form-control" placeholder="e.g. ₹12,000 / Month" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="location">Location *</label>
+          <input type="text" id="location" name="location" class="form-control" placeholder="e.g. Tirupati / Remote / Hybrid" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="deadline">Application Deadline</label>
+          <input type="text" id="deadline" name="deadline" class="form-control" placeholder="e.g. 30 April 2026">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="skills">Skills Evaluated (Comma-separated) *</label>
+        <input type="text" id="skills" name="skills" class="form-control" placeholder="e.g. Python, SQL, Git" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="eligibility">Eligibility</label>
+        <input type="text" id="eligibility" name="eligibility" class="form-control" placeholder="e.g. B.Tech 1st to 3rd Year (CSE/AIML)">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Internship Description &amp; Scope *</label>
+        <textarea id="description" name="description" class="form-control" rows="4" placeholder="Describe projects, mentorship opportunities, and weekly learning goals..." required></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-secondary" style="flex: 1;">Publish Internship &rarr;</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

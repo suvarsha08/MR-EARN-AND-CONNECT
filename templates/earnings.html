@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}My Earnings - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-success">Skill Monetization Hub</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">💰 My Earnings</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Track earnings accumulated from completed campus services, record writing, typing, and academic assistance.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm">+ Offer New Service</a>
+      <a href="{{ url_for('orders') }}" class="btn btn-outline btn-sm">Manage Orders</a>
+    </div>
+  </div>
+
+  <!-- PROMINENT DEMO EARNINGS HERO CARD -->
+  <div class="earnings-hero-card">
+    <span class="badge badge-demo" style="margin-bottom: 0.75rem; padding: 4px 12px; font-size: 0.8rem;">
+      Ideathon Prototype Tracker
+    </span>
+    <div style="font-size: 1.1rem; color: #a7f3d0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+      Total Accumulated Balance
+    </div>
+    <div class="earnings-amount">
+      ₹{{ "%.0f"|format(total_earnings) }} <span style="font-size: 1.6rem; color: #a7f3d0; font-weight: 600;">DEMO EARNINGS</span>
+    </div>
+    <p class="earnings-disclaimer">
+      ⚠️ <strong>Prototype / demo earnings only.</strong> No real financial transactions, bank accounts, or payment processing is used.
+    </p>
+  </div>
+
+  <!-- Summary Tiles -->
+  <div class="grid-3" style="margin-bottom: 2.5rem;">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(99,102,241,0.15); color: #818cf8;">📦</div>
+      <div class="stat-number">{{ total_orders }}</div>
+      <div class="stat-label">Total Orders Handled</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(16,185,129,0.15); color: #34d399;">✅</div>
+      <div class="stat-number">{{ completed_orders }}</div>
+      <div class="stat-label">Completed Services</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: rgba(245,158,11,0.15); color: #fbbf24;">⏳</div>
+      <div class="stat-number">{{ pending_orders }}</div>
+      <div class="stat-label">Pending / In Progress</div>
+    </div>
+  </div>
+
+  <!-- Recent Completed Earnings History -->
+  <div class="card" style="padding: 2rem;">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">📜 Completed Services &amp; Earnings Log</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Detailed audit trail of services fulfilled and demo revenue credited</p>
+      </div>
+    </div>
+
+    {% if history %}
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+          <thead>
+            <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--text-subtle);">
+              <th style="padding: 0.75rem 0.5rem;">Date</th>
+              <th style="padding: 0.75rem 0.5rem;">Service Title</th>
+              <th style="padding: 0.75rem 0.5rem;">Client</th>
+              <th style="padding: 0.75rem 0.5rem;">Order Ref</th>
+              <th style="padding: 0.75rem 0.5rem; text-align: right;">Credited Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in history %}
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <td style="padding: 0.85rem 0.5rem; color: var(--text-muted);">{{ item.date[:10] }}</td>
+                <td style="padding: 0.85rem 0.5rem; font-weight: 600; color: #ffffff;">{{ item.service_title }}</td>
+                <td style="padding: 0.85rem 0.5rem; color: #a5b4fc;">{{ item.customer_name }}</td>
+                <td style="padding: 0.85rem 0.5rem;"><span class="badge badge-neutral">#{{ item.order_id }}</span></td>
+                <td style="padding: 0.85rem 0.5rem; text-align: right; font-weight: 800; color: #34d399; font-size: 1.05rem;">
+                  +₹{{ "%.0f"|format(item.amount) }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+        <p>No completed service earnings recorded yet.</p>
+        <p style="font-size: 0.82rem; color: var(--text-subtle); margin-top: 4px;">
+          When an order is marked as "Completed" in your Orders dashboard, the amount will immediately appear here.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

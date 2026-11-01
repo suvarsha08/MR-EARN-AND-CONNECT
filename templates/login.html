@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 520px; padding-top: 2rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="brand-icon-box" style="margin: 0 auto 1rem; width: 50px; height: 50px; font-size: 1.3rem;">MR</div>
+      <h2 style="font-size: 1.8rem; margin-bottom: 0.35rem;">Welcome Back</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Sign in to your MR EARN &amp; CONNECT account</p>
+    </div>
+
+    <!-- 1-Click Demo Login Bar for Ideathon Judges -->
+    <div class="demo-switcher-box" style="margin-top: 0; margin-bottom: 1.75rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: #f59e0b;">⚡ Ideathon 1-Click Demo Access:</span>
+        <span class="badge badge-demo">Instant</span>
+      </div>
+      <div class="demo-buttons-grid" style="grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+        <a href="{{ url_for('demo_login', role='student') }}" class="btn btn-outline btn-sm" style="font-size: 0.8rem; background: rgba(99,102,241,0.1); border-color: #6366f1;">
+          👨‍🎓 Student (Arjun)
+        </a>
+        <a href="{{ url_for('demo_login', role='employer') }}" class="btn btn-outline btn-sm" style="font-size: 0.8rem; background: rgba(56,189,248,0.1); border-color: #38bdf8;">
+          🏢 Employer (TechCorp)
+        </a>
+        <a href="{{ url_for('demo_login', role='customer') }}" class="btn btn-outline btn-sm" style="font-size: 0.8rem; background: rgba(16,185,129,0.1); border-color: #10b981;">
+          👤 Customer (Prof. Sharma)
+        </a>
+        <a href="{{ url_for('demo_login', role='admin') }}" class="btn btn-outline btn-sm" style="font-size: 0.8rem; background: rgba(245,158,11,0.1); border-color: #f59e0b;">
+          👨‍💼 Campus Admin
+        </a>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+      <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+      <span style="padding: 0 10px; color: var(--text-subtle); font-size: 0.8rem; text-transform: uppercase;">Or with Email</span>
+      <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+    </div>
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="e.g. arjun@student.mrdu.edu" required autofocus>
+      </div>
+
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+          <label class="form-label" for="password" style="margin-bottom: 0;">Password</label>
+          <small style="color: var(--text-subtle);">Demo PW: Student@123</small>
+        </div>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.8rem;">
+        Sign In &rarr;
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; color: var(--text-muted);">
+      Don't have an account yet? 
+      <a href="{{ url_for('register') }}" style="color: var(--mrdu-orange); font-weight: 700;">Register here</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

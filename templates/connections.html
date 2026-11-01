@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Connect Network - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span class="badge badge-primary">Campus Networking</span>
+        <span class="badge badge-success">{{ connected_count }} Connections</span>
+      </div>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🤝 MRDU Connect Portal</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Discover and connect with fellow engineering peers, recruiters, faculty members, and campus service providers.
+      </p>
+    </div>
+  </div>
+
+  <!-- Search & Role Filters -->
+  <form method="GET" action="{{ url_for('connections') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search by name, department, company..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 180px;">
+      <select name="role" class="form-control">
+        <option value="">All Community Roles</option>
+        <option value="student" {% if selected_role == 'student' %}selected{% endif %}>Students</option>
+        <option value="employer" {% if selected_role == 'employer' %}selected{% endif %}>Employers &amp; Recruiters</option>
+        <option value="customer" {% if selected_role == 'customer' %}selected{% endif %}>Faculty &amp; Customers</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_role %}
+      <a href="{{ url_for('connections') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Network Users Grid -->
+  {% if users %}
+    <div class="grid-3">
+      {% for u in users %}
+        <div class="card" style="text-align: center; padding: 2rem 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <!-- Avatar -->
+            <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #ffffff; margin: 0 auto 1rem; box-shadow: var(--shadow-sm);">
+              {{ u.name[0] }}
+            </div>
+
+            <span class="badge {% if u.role == 'student' %}badge-primary{% elif u.role == 'employer' %}badge-info{% elif u.role == 'customer' %}badge-success{% else %}badge-warning{% endif %}" style="margin-bottom: 0.5rem;">
+              {{ u.role.title() }}
+            </span>
+
+            <h3 style="font-size: 1.25rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.25rem;">
+              <a href="{{ url_for('view_profile', user_id=u.id) }}" class="card-title-link" style="color: var(--text-heading-dark); font-weight: 800;">{{ u.name }}</a>
+            </h3>
+
+            {% if u.role == 'student' %}
+              <p style="color: var(--text-heading-medium); font-size: 0.9rem; font-weight: 700;">
+                {{ u.course or 'B.Tech Student' }}
+              </p>
+              <small style="color: var(--text-muted); display: block; margin-top: 2px; font-weight: 500;">
+                {{ u.year or 'MRDU' }} &bull; {{ u.department or 'Engineering' }}
+              </small>
+            {% elif u.role == 'employer' %}
+              <p style="color: var(--color-primary-navy); font-size: 0.9rem; font-weight: 700;">
+                🏢 {{ u.company_name or 'Hiring Partner' }}
+              </p>
+              <small style="color: var(--text-muted); display: block; font-weight: 500;">Recruiter / Talent Lead</small>
+            {% else %}
+              <p style="color: #065f46; font-size: 0.9rem; font-weight: 700;">
+                🏛️ Academic / Campus Client
+              </p>
+            {% endif %}
+          </div>
+
+          <!-- Connect / Connected Button Form -->
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); display: flex; gap: 0.5rem; justify-content: center;">
+            <a href="{{ url_for('view_profile', user_id=u.id) }}" class="btn btn-outline btn-sm">
+              View Profile
+            </a>
+
+            <form method="POST" action="{{ url_for('toggle_connection', target_id=u.id) }}">
+              {% if u.is_connected %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" style="color: #f87171; border-color: rgba(248,113,113,0.35);">
+                  Connected (Remove)
+                </button>
+              {% else %}
+                <button type="submit" class="btn btn-primary btn-sm">
+                  🤝 Connect
+                </button>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3rem 2rem;">
+      <p style="color: var(--text-muted);">No members matched your search filter.</p>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

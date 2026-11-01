@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Order Management - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-success">Order Fulfillment</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">
+        {% if is_provider %}📦 Campus Service Orders Received{% else %}🛒 My Requested Service Orders{% endif %}
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Workflow: 
+        <span style="color: #34d399; font-weight: 600;">
+          REQUESTED &rarr; ACCEPTED &rarr; IN PROGRESS &rarr; COMPLETED &rarr; RATED
+        </span>
+      </p>
+    </div>
+
+    {% if is_provider %}
+      <a href="{{ url_for('my_earnings') }}" class="btn btn-secondary btn-sm">💰 View Demo Earnings &rarr;</a>
+    {% else %}
+      <a href="{{ url_for('services') }}" class="btn btn-primary btn-sm">Browse More Services</a>
+    {% endif %}
+  </div>
+
+  <!-- Orders List -->
+  {% if orders %}
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      {% for ord in orders %}
+        <div class="card" style="padding: 1.75rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="badge badge-neutral">Order #{{ ord.id }}</span>
+                <small style="color: var(--text-subtle);">Created on {{ ord.created_at }}</small>
+              </div>
+
+              <h3 style="font-size: 1.35rem; color: var(--text-heading-dark); font-weight: 800; margin-top: 0.4rem;">
+                <a href="{{ url_for('service_details', service_id=ord.service_id) }}" class="card-title-link" style="color: var(--text-heading-dark); font-weight: 800;">
+                  {{ ord.service_title }}
+                </a>
+              </h3>
+
+              <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem; margin-top: 4px;">
+                {% if is_provider %}
+                  Ordered by: <strong style="color: var(--text-heading-dark); font-weight: 800;">{{ ord.customer_name }}</strong> ({{ ord.customer_phone or 'No phone' }})
+                {% else %}
+                  Service Provider: <strong style="color: var(--text-heading-dark); font-weight: 800;">{{ ord.provider_name }}</strong> ({{ ord.provider_phone or 'No phone' }})
+                {% endif %}
+              </p>
+
+              <!-- Requirements note -->
+              <div style="margin-top: 0.75rem; background: var(--bg-hover); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); font-size: 0.88rem; color: var(--text-main); max-width: 650px;">
+                <strong style="color: var(--text-heading-dark); font-weight: 750;">Requirements / Instructions:</strong>
+                <p style="margin-top: 2px; line-height: 1.5; color: var(--text-main); font-weight: 500;">"{{ ord.requirements }}"</p>
+              </div>
+            </div>
+
+            <!-- Amount and Status Badge -->
+            <div style="text-align: right; min-width: 200px;">
+              <div style="font-size: 1.8rem; font-weight: 800; color: #065f46; font-family: var(--font-heading);">
+                ₹{{ "%.0f"|format(ord.amount) }}
+              </div>
+              <small class="badge badge-demo" style="margin-bottom: 0.5rem;">Demo Value</small>
+              <div>
+                <span class="badge {% if ord.status == 'Completed' %}badge-success{% elif ord.status == 'Requested' %}badge-warning{% elif ord.status == 'Cancelled' %}badge-danger{% else %}badge-info{% endif %}" style="font-size: 0.9rem; padding: 0.35rem 0.8rem;">
+                  {{ ord.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Provider Actions Workflow (Requested -> Accepted -> In Progress -> Completed) -->
+          {% if is_provider and ord.status != 'Cancelled' %}
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+              <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+                Update workflow progress for this order:
+              </span>
+              
+              <form method="POST" action="{{ url_for('update_order_status', order_id=ord.id) }}" style="display: flex; gap: 6px;">
+                {% if ord.status == 'Requested' %}
+                  <input type="hidden" name="status" value="Accepted">
+                  <button type="submit" class="btn btn-primary btn-sm">Accept Order &rarr;</button>
+                {% elif ord.status == 'Accepted' %}
+                  <input type="hidden" name="status" value="In Progress">
+                  <button type="submit" class="btn btn-outline-primary btn-sm">Mark In Progress &rarr;</button>
+                {% elif ord.status == 'In Progress' %}
+                  <input type="hidden" name="status" value="Completed">
+                  <button type="submit" class="btn btn-secondary btn-sm">Mark Completed &amp; Credit Earnings &rarr;</button>
+                {% elif ord.status == 'Completed' %}
+                  <span class="badge badge-success">Order Completed &bull; Credited to Earnings</span>
+                {% endif %}
+              </form>
+            </div>
+          {% endif %}
+
+          <!-- Customer Review & Rating Form if Completed -->
+          {% if not is_provider and ord.status == 'Completed' %}
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+              {% if ord.rating %}
+                <div style="color: #b45309; font-size: 0.95rem; font-weight: 700;">
+                  Your Rating: {% for i in range(ord.rating) %}★{% endfor %}
+                  <span style="color: var(--text-main); font-size: 0.85rem; margin-left: 8px; font-weight: 500;">"{{ ord.review }}"</span>
+                </div>
+              {% else %}
+                <form method="POST" action="{{ url_for('rate_order', order_id=ord.id) }}" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                  <span style="font-size: 0.88rem; font-weight: 750; color: var(--text-heading-dark);">Rate this completed service:</span>
+                  <select name="rating" class="form-control" style="width: auto; padding: 0.35rem 0.6rem; font-size: 0.85rem;">
+                    <option value="5">⭐⭐⭐⭐⭐ 5 Stars (Outstanding)</option>
+                    <option value="4">⭐⭐⭐⭐ 4 Stars (Very Good)</option>
+                    <option value="3">⭐⭐⭐ 3 Stars (Satisfactory)</option>
+                    <option value="2">⭐⭐ 2 Stars</option>
+                    <option value="1">⭐ 1 Star</option>
+                  </select>
+                  <input type="text" name="review" class="form-control" placeholder="Write feedback for the student provider..." style="flex: 1; min-width: 240px; padding: 0.35rem 0.75rem; font-size: 0.85rem;" required>
+                  <button type="submit" class="btn btn-secondary btn-sm">Submit Review</button>
+                </form>
+              {% endif %}
+            </div>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📦</div>
+      <h3 style="font-size: 1.3rem;">No active orders</h3>
+      <p style="color: var(--text-muted); margin: 0.5rem 0 1.5rem;">
+        {% if is_provider %}
+          You haven't received any orders yet. Ensure your services are listed in the marketplace.
+        {% else %}
+          You haven't requested any student services yet.
+        {% endif %}
+      </p>
+      <a href="{{ url_for('services') }}" class="btn btn-secondary btn-sm">Explore Skill Marketplace</a>
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

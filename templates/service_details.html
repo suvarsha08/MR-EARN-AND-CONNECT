@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.title }} - Skill Marketplace | MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; padding-top: 1.5rem;">
+
+  <div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('services') }}" class="btn btn-outline btn-sm">&larr; Back to Marketplace</a>
+  </div>
+
+  <div class="grid-3" style="align-items: flex-start;">
+    
+    <!-- Left 2 Columns: Service Details & Reviews -->
+    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 1.5rem;">
+      <div class="card" style="padding: 2.25rem 2rem;">
+        <span class="badge badge-success">{{ service.category }}</span>
+        <h1 style="font-size: 2.35rem; color: var(--text-heading-dark); font-weight: 800; margin: 0.5rem 0 0.25rem;">{{ service.title }}</h1>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Listed on {{ service.created_at[:10] }} &bull; Available for campus &amp; external requests</p>
+
+        <!-- Description -->
+        <div style="margin: 1.75rem 0;">
+          <h3 style="font-size: 1.25rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.5rem;">Service Description &amp; Deliverables</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; white-space: pre-line;">
+            {{ service.description }}
+          </p>
+        </div>
+
+        <!-- Skills Used -->
+        <div style="margin: 1.5rem 0;">
+          <h3 style="font-size: 1.2rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.5rem;">Skills Applied</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            {% for skill in service.skills.split(',') %}
+              <span class="skill-pill skill-pill-neutral">⚡ {{ skill.strip() }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Reviews Card -->
+      <div class="card" style="padding: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <h3 class="card-title">⭐ Customer Reviews ({{ reviews|length }})</h3>
+          <span style="font-size: 1.1rem; font-weight: 800; color: #fbbf24;">
+            ★ {{ "%.1f"|format(service.avg_rating) }} / 5.0
+          </span>
+        </div>
+
+        {% if reviews %}
+          <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for r in reviews %}
+              <div style="background: var(--bg-hover); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <strong style="color: var(--text-heading-dark); font-size: 0.95rem; font-weight: 750;">{{ r.customer_name }}</strong>
+                  <span style="color: #b45309;">{% for i in range(r.rating) %}★{% endfor %}</span>
+                </div>
+                <p style="color: var(--text-main); font-size: 0.9rem; margin-top: 0.4rem; font-style: italic;">
+                  "{{ r.review }}"
+                </p>
+                <small style="color: var(--text-muted); display: block; margin-top: 4px; font-weight: 500;">{{ r.created_at[:10] }}</small>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1rem;">
+            No customer reviews yet. Be the first to order and review!
+          </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Column: Pricing & Order Action -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      
+      <!-- Order Card -->
+      <div class="card" style="border-color: rgba(0,166,81,0.35); background: linear-gradient(135deg, rgba(0,166,81,0.06) 0%, var(--bg-card) 100%);">
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <span class="badge badge-demo">Demo Prototype Pricing</span>
+          <div style="font-size: 2.8rem; font-weight: 800; color: #065f46; font-family: var(--font-heading); margin-top: 0.5rem;">
+            ₹{{ "%.0f"|format(service.price) }}
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">Standard delivery package</p>
+        </div>
+
+        <ul style="list-style: none; font-size: 0.88rem; color: var(--text-main); display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <li style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="color: var(--text-muted); font-weight: 600;">⏱️ Delivery Time:</span>
+            <strong style="color: var(--text-heading-dark); font-weight: 750;">{{ service.delivery_time }}</strong>
+          </li>
+          <li style="display: flex; align-items: center; justify-content: space-between;">
+            <span>🟢 Availability:</span>
+            <span class="badge badge-success">{{ service.availability }}</span>
+          </li>
+          <li style="display: flex; align-items: center; justify-content: space-between;">
+            <span>⭐ Provider Rating:</span>
+            <strong style="color: #fbbf24;">★ {{ "%.1f"|format(service.avg_rating) }}</strong>
+          </li>
+        </ul>
+
+        {% if current_user and current_user.id == service.provider_id %}
+          <a href="{{ url_for('edit_service', service_id=service.id) }}" class="btn btn-outline btn-sm" style="width: 100%;">
+            ✏️ Edit Your Service Listing
+          </a>
+        {% elif current_user %}
+          <button class="btn btn-secondary" style="width: 100%;" data-modal-target="orderModal">
+            Request / Order Service &rarr;
+          </button>
+        {% else %}
+          <a href="{{ url_for('login', next=request.url) }}" class="btn btn-primary" style="width: 100%;">
+            Log in to Order
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Provider Bio Card -->
+      <div class="card">
+        <h4 style="font-size: 1.1rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.75rem;">Student Service Provider</h4>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; color: #ffffff;">
+            {{ service.provider_name[0] }}
+          </div>
+          <div>
+            <div style="font-weight: 750; color: var(--text-heading-dark); font-size: 1.05rem;">{{ service.provider_name }}</div>
+            <small style="color: var(--text-heading-medium); font-weight: 600;">{{ service.course or 'B.Tech Student' }} ({{ service.year or 'Undergraduate' }})</small>
+          </div>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+          {{ service.bio or 'Meritorious student offering reliable academic and technical services at MRDU Tirupati.' }}
+        </p>
+
+        <a href="{{ url_for('view_profile', user_id=service.provider_id) }}" class="btn btn-outline-primary btn-sm" style="width: 100%;">
+          View Complete Student Portfolio &rarr;
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ORDER MODAL -->
+  <div id="orderModal" class="modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px);">
+    <div class="card" style="width: 100%; max-width: 520px; padding: 2rem; position: relative;">
+      <h3 style="font-size: 1.45rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.35rem;">Request "{{ service.title }}"</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        Amount: <strong style="color: var(--mrdu-green-dark); font-weight: 800;">₹{{ "%.0f"|format(service.price) }}</strong> &bull; Estimated Delivery: <strong>{{ service.delivery_time }}</strong>
+      </p>
+
+      <form method="POST" action="{{ url_for('place_order', service_id=service.id) }}">
+        <div class="form-group">
+          <label class="form-label" for="requirements">Describe Your Service Requirements *</label>
+          <textarea id="requirements" name="requirements" class="form-control" rows="4" placeholder="e.g. Please format 15 pages of Physics lab observation data and write clean record diagrams..." required></textarea>
+        </div>
+
+        <div style="background: rgba(245,158,11,0.08); border: 1px dashed rgba(245,158,11,0.3); padding: 0.75rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.78rem; color: #fbbf24;">
+          ⚠️ <strong>Demo Notice:</strong> This is a university prototype demo. No real payment gateway or bank card is charged. Orders create demo earnings for student demonstration.
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-secondary">Confirm Order Request &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

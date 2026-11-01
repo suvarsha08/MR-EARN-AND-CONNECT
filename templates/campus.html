@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}MRDU Campus Portal - Malla Reddy Deemed to be University, Tirupati{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <!-- Campus Hero Banner -->
+  <div class="card dark-hero-card" style="padding: 3rem 2rem; margin-bottom: 2.5rem; background: linear-gradient(135deg, #082142 0%, #103460 100%); border: 2px solid rgba(249,87,0,0.3); text-align: center; color: #ffffff;">
+    
+    <!-- Official University Branding -->
+    <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+      <img src="{{ url_for('static', filename='images/mrdu_logo.jpg') }}" alt="Malla Reddy Deemed to be University Official Logo" style="height: 95px; width: auto; object-fit: contain; background: #ffffff; padding: 6px 14px; border-radius: var(--radius-md); box-shadow: 0 4px 16px rgba(0,0,0,0.25);">
+    </div>
+
+    <span class="badge badge-primary" style="margin-bottom: 0.75rem;">University Innovation Ecosystem</span>
+    <h1 style="font-size: 2.6rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">Malla Reddy Deemed to be University</h1>
+    <p style="color: #fed7aa; font-size: 1.2rem; font-weight: 700;">Tirupati Campus, Andhra Pradesh</p>
+    <p style="color: #cbd5e1; max-width: 750px; margin: 0.75rem auto 1.75rem; font-size: 0.95rem; line-height: 1.6;">
+      Fostering technical talent, student innovation, hands-on engineering projects, and industry readiness through the <strong>MR EARN &amp; CONNECT</strong> portal.
+    </p>
+
+    <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+      <a href="{{ url_for('announcements') }}" class="btn btn-outline btn-sm">📢 Campus Announcements</a>
+      <a href="{{ url_for('opportunities') }}" class="btn btn-primary btn-sm">🚀 Campus Ideathons &amp; Events</a>
+      <a href="{{ url_for('projects') }}" class="btn btn-secondary btn-sm">🛠️ Student Project Showcase</a>
+    </div>
+  </div>
+
+  <!-- About MRDU & Campus Life -->
+  <div class="grid-2" style="margin-bottom: 2.5rem;">
+    <div class="card" style="padding: 2rem;">
+      <h2 style="font-size: 1.55rem; font-weight: 800; color: var(--text-heading-dark); margin-bottom: 0.75rem;">🏛️ About MRDU Tirupati</h2>
+      <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1rem;">
+        Malla Reddy Deemed to be University, Tirupati is dedicated to creating world-class engineers, computer scientists, and technologists. The campus emphasizes practical problem solving, experiential learning, and student entrepreneurship.
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.7;">
+        Through MR EARN &amp; CONNECT, MRDU provides an integrated digital bridge that allows students to build portfolios, practice transparent skill matching, and monetize their academic proficiencies.
+      </p>
+    </div>
+
+    <div class="card" style="padding: 2rem;">
+      <h2 style="font-size: 1.55rem; font-weight: 800; color: var(--text-heading-dark); margin-bottom: 0.75rem;">🏷️ MR Page Branding &amp; Initiatives</h2>
+      <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1rem;">
+        The <strong>MR Page</strong> ecosystem serves as the student innovation and incubation arm. It coordinates university fests, hackathons, and technical symposiums across all constituent schools.
+      </p>
+      <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm); font-size: 0.88rem; color: #c7d2fe;">
+        <strong>Core Mission:</strong> “Every student has skills. Every skill can create an opportunity.”
+      </div>
+    </div>
+  </div>
+
+  <!-- Departments & Academic Programs -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--text-heading-dark); margin-bottom: 0.5rem;">🎓 Academic Departments &amp; Courses</h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Key engineering and emerging technology branches at MRDU Tirupati</p>
+
+    <div class="grid-3">
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">CSE - Artificial Intelligence &amp; ML</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Focuses on Python algorithms, machine learning frameworks, data processing, and intelligent agent systems.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">CSE - Data Science &amp; Big Data</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Covers relational database systems, SQL optimization, statistical analysis, and interactive visual dashboards.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">CSE - Cyber Security &amp; IoT</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Network protocols, hardware interfacing, vulnerability auditing, and secure web application development.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">Electronics &amp; Communication (ECE)</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Embedded systems, microcontrollers, signal processing, and C/Java programming fundamentals.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">Mechanical &amp; Mechatronics</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Automation systems, CAD design, robotics, and industrial automation control scripts.
+        </p>
+      </div>
+
+      <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+        <h4 style="color: var(--text-heading-dark); font-size: 1.1rem; font-weight: 750; margin-bottom: 0.35rem;">Innovation &amp; Incubation Cell</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">
+          Mentorship, seed funding guidance, and patent advisory for student entrepreneurs and startup teams.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Activities, Hackathons & Ideathons -->
+  <div class="card" style="padding: 2rem; margin-bottom: 2.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+      <div>
+        <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--text-heading-dark);">🚀 Flagship Campus Ideathons &amp; Events</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Competitions hosted at MRDU Tirupati Auditorium</p>
+      </div>
+      <a href="{{ url_for('opportunities') }}" class="btn btn-outline-primary btn-sm">All Opportunities &rarr;</a>
+    </div>
+
+    <div class="grid-2">
+      {% for opp in opportunities %}
+        <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1.25rem; border-radius: var(--radius-sm);">
+          <span class="badge badge-warning">{{ opp.category }}</span>
+          <h4 style="font-size: 1.15rem; font-weight: 750; color: var(--text-heading-dark); margin-top: 0.35rem;">{{ opp.title }}</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; line-height: 1.5;">{{ opp.description[:110] }}...</p>
+          <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-subtle);">
+            <span>📅 {{ opp.date }}</span> &bull; <span>📍 {{ opp.location }}</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Campus Announcements Feed -->
+  <div class="card" style="padding: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+      <h2 style="font-size: 1.65rem; font-weight: 800; color: var(--text-heading-dark);">📢 Official Campus Announcements</h2>
+      <a href="{{ url_for('announcements') }}" class="btn btn-outline btn-sm">Full Notice Board</a>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      {% for ann in announcements %}
+        <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 1rem; border-radius: var(--radius-sm);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="badge badge-info">{{ ann.category }}</span>
+            <small style="color: var(--text-subtle);">{{ ann.date }}</small>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 750; color: var(--text-heading-dark); margin-top: 0.35rem;">{{ ann.title }}</h4>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; line-height: 1.5;">{{ ann.content }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

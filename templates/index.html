@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+
+{% block title %}MR EARN & CONNECT - Find Opportunities. Connect Skills. Earn.{% endblock %}
+
+{% block content %}
+<div class="container">
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div style="display: flex; justify-content: center; margin-bottom: 1.25rem;">
+      <img src="{{ url_for('static', filename='images/mrdu_logo.jpg') }}" alt="Malla Reddy Deemed to be University Official Logo" style="height: 85px; width: auto; object-fit: contain; background: #ffffff; padding: 6px 12px; border-radius: var(--radius-md); box-shadow: var(--shadow-md); border: 1px solid var(--border-subtle);">
+    </div>
+
+    <div class="hero-pill">
+      <span>🎓 Malla Reddy Deemed to be University (MRDU), Tirupati</span>
+      <span class="badge badge-demo">Ideathon 2026 Project</span>
+    </div>
+
+    <h1 class="hero-title">
+      Find Opportunities.<br>
+      <span class="hero-gradient-text">Connect Skills. Earn.</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      The unified student opportunity and skill-to-earn ecosystem for <strong>MRDU Tirupati</strong>. 
+      Bridging classroom learning with verified jobs, internships, freelance campus services, and career-building projects.
+    </p>
+
+    <!-- Hero CTA Buttons -->
+    <div class="hero-cta-group">
+      <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-lg">💼 Find Jobs</a>
+      <a href="{{ url_for('internships') }}" class="btn btn-secondary btn-lg">🎓 Find Internships</a>
+      <a href="{{ url_for('services') }}" class="btn btn-outline-primary btn-lg">💰 Offer Your Skills</a>
+      <a href="{{ url_for('opportunities') }}" class="btn btn-outline btn-lg">🚀 Explore Opportunities</a>
+    </div>
+
+    <!-- Quick Demo Switcher for Ideathon Judges -->
+    <div class="demo-switcher-box" style="max-width: 820px; margin: 0 auto; text-align: left;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+        <span style="font-weight: 700; color: #f59e0b; font-size: 0.92rem;">
+          ⚡ Ideathon Quick Demo Mode (1-Click Instant Login):
+        </span>
+        <span class="badge badge-demo">No Typing Required</span>
+      </div>
+      <div class="demo-buttons-grid">
+        <a href="{{ url_for('demo_login', role='student') }}" class="btn btn-outline btn-sm" style="background: rgba(99,102,241,0.15); border-color: #6366f1;">
+          👨‍🎓 Student (Arjun)
+        </a>
+        <a href="{{ url_for('demo_login', role='employer') }}" class="btn btn-outline btn-sm" style="background: rgba(56,189,248,0.15); border-color: #38bdf8;">
+          🏢 Employer (TechCorp)
+        </a>
+        <a href="{{ url_for('demo_login', role='customer') }}" class="btn btn-outline btn-sm" style="background: rgba(16,185,129,0.15); border-color: #10b981;">
+          👤 Customer (Faculty)
+        </a>
+        <a href="{{ url_for('demo_login', role='admin') }}" class="btn btn-outline btn-sm" style="background: rgba(245,158,11,0.15); border-color: #f59e0b;">
+          👨‍💼 Admin Panel
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platform Flow Visual Diagram -->
+  <section class="flow-container">
+    <div class="flow-title">🔗 PLATFORM FLOW &amp; ARCHITECTURE</div>
+    <div class="flow-steps">
+      <div class="flow-node">
+        <span>🏛️ MRDU</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node">
+        <span>👨‍🎓 STUDENTS</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node">
+        <span>📚 EDUCATION + SKILLS</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node highlight">
+        <span>🚀 MR EARN &amp; CONNECT</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node">
+        <span>💼 JOBS | INTERNSHIPS | SERVICES</span>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node highlight" style="border-color: #10b981;">
+        <span>🏆 EARNINGS &amp; CAREER GROWTH</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sample / Demo Statistics -->
+  <section>
+    <div style="text-align: center; margin-bottom: 1rem;">
+      <span class="badge badge-demo">Sample / Demo Platform Statistics</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card stat-students">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Active MRDU Students</div>
+        <small style="color: var(--text-subtle);">({{ student_count }} in current demo db)</small>
+      </div>
+
+      <div class="stat-card stat-jobs">
+        <div class="stat-icon">💼</div>
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Verified Jobs</div>
+        <small style="color: var(--text-subtle);">({{ job_count }} active postings)</small>
+      </div>
+
+      <div class="stat-card stat-internships">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-number">30+</div>
+        <div class="stat-label">Paid Internships</div>
+        <small style="color: var(--text-subtle);">({{ internship_count }} opportunities)</small>
+      </div>
+
+      <div class="stat-card stat-services">
+        <div class="stat-icon">💰</div>
+        <div class="stat-number">100+</div>
+        <div class="stat-label">Skill Marketplace Services</div>
+        <small style="color: var(--text-subtle);">({{ service_count }} services listed)</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Student Journey Section -->
+  <section style="margin: 4.5rem 0;">
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+      <span class="badge badge-primary">End-to-End Progression</span>
+      <h2 style="font-size: 2.2rem; margin-top: 0.5rem;">🌟 The Core Student Journey</h2>
+      <p style="color: var(--text-muted); max-width: 650px; margin: 0.5rem auto 0;">
+        From the very first day in campus to real-world earnings and placement readiness:
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; text-align: center;">
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📚</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">1. LEARN</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Absorb course concepts in engineering &amp; technology.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">⚙️</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">2. BUILD SKILLS</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Hone technical, digital, and academic skills.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">👤</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">3. CREATE PROFILE</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Build a modern student portfolio &amp; CV.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📊</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">4. ANALYZE SKILLS</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Track profile completion &amp; self-reported levels.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🤝</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">5. CONNECT</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Network with peers, recruiters &amp; mentors.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem;">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">💼</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--text-heading-dark);">6. FIND &amp; APPLY</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Review transparent Skill Compatibility &amp; apply.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem; border-color: rgba(16,185,129,0.35); background: rgba(16,185,129,0.05);">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">💰</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--mrdu-green-dark);">7. OFFER &amp; EARN</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Monetize record writing, typing &amp; coding.</p>
+      </div>
+
+      <div class="card" style="padding: 1.25rem; border-color: rgba(249,87,0,0.35); background: rgba(249,87,0,0.05);">
+        <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🚀</div>
+        <h4 style="font-size: 1.02rem; font-weight: 800; color: var(--mrdu-orange-dark);">8. GROW</h4>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Showcase projects, achievements &amp; launch career.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Jobs Preview -->
+  <section style="margin: 4rem 0;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h2 style="font-size: 1.85rem; font-weight: 800; color: var(--text-heading-dark);">💼 Latest Job Openings</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Transparent skill-compatibility analysis on every job card</p>
+      </div>
+      <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary btn-sm">View All Jobs &rarr;</a>
+    </div>
+
+    <div class="grid-2">
+      {% for job in featured_jobs %}
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="badge badge-primary">{{ job.category }}</span>
+              <h3 style="font-size: 1.25rem; margin-top: 0.4rem;">
+                <a href="{{ url_for('job_details', job_id=job.id) }}" class="card-title-link">{{ job.title }}</a>
+              </h3>
+              <p style="color: var(--text-heading-medium); font-size: 0.92rem; font-weight: 700;">🏢 {{ job.company_name }}</p>
+            </div>
+            <span class="badge badge-success">{{ job.salary }}</span>
+          </div>
+
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.5;">
+            {{ job.description[:130] }}...
+          </p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem;">
+            {% for skill in job.skills.split(',') %}
+              <span class="skill-pill skill-pill-neutral">⚡ {{ skill.strip() }}</span>
+            {% endfor %}
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem;">
+            <span style="font-size: 0.82rem; color: var(--text-subtle);">📍 {{ job.location }} &bull; {{ job.job_type }}</span>
+            <a href="{{ url_for('job_details', job_id=job.id) }}" class="btn btn-primary btn-sm">View &amp; Apply &rarr;</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Skill Marketplace Preview -->
+  <section style="margin: 4rem 0;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h2 style="font-size: 1.85rem; font-weight: 800; color: var(--text-heading-dark);">💰 Skill-to-Earn Marketplace</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Students monetizing valuable academic and technical skills</p>
+      </div>
+      <a href="{{ url_for('services') }}" class="btn btn-outline-primary btn-sm">Browse All Services &rarr;</a>
+    </div>
+
+    <div class="grid-2">
+      {% for srv in featured_services %}
+        <div class="card" style="border-left: 3px solid #10b981;">
+          <div class="card-header">
+            <div>
+              <span class="badge badge-success">{{ srv.category }}</span>
+              <h3 style="font-size: 1.2rem; margin-top: 0.4rem;">
+                <a href="{{ url_for('service_details', service_id=srv.id) }}" class="card-title-link">{{ srv.title }}</a>
+              </h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem;">
+                Provider: <strong style="color: var(--text-heading-dark); font-weight: 750;">{{ srv.provider_name }}</strong>
+                <span style="color: #d97706; font-weight: 700; margin-left: 6px;">★ {{ "%.1f"|format(srv.avg_rating) }}</span>
+                <span style="color: var(--text-subtle);">({{ srv.review_count }})</span>
+              </p>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 1.35rem; font-weight: 800; color: var(--mrdu-green-dark);">₹{{ "%.0f"|format(srv.price) }}</div>
+              <small style="color: var(--text-subtle);">⏱️ {{ srv.delivery_time }}</small>
+            </div>
+          </div>
+
+          <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 1rem;">
+            {{ srv.description[:110] }}...
+          </p>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem;">
+            <span class="badge badge-primary">Available</span>
+            <a href="{{ url_for('service_details', service_id=srv.id) }}" class="btn btn-secondary btn-sm">Order Service &rarr;</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Judge-Friendly Value Proposition -->
+  <section class="card dark-hero-card" style="padding: 2.5rem; margin: 4rem 0; background: linear-gradient(135deg, rgba(8,33,66,0.95) 0%, rgba(16,52,96,0.95) 100%); border: 2px solid rgba(249,87,0,0.3);">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <span class="badge badge-warning">🏆 Ideathon Value Proposition</span>
+      <h2 style="font-size: 2.1rem; font-weight: 800; color: #ffffff; margin-top: 0.5rem;">Why MR EARN &amp; CONNECT Wins</h2>
+    </div>
+
+    <div class="grid-3">
+      <div style="background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.15);">
+        <h3 style="color: #fca5a5; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.75rem;">⚠️ The Problem</h3>
+        <p style="color: #e2e8f0; font-size: 0.88rem; line-height: 1.6;">
+          Students search across 10+ disjoint platforms for jobs, internships, hackathons, and freelance gigs. Many first- and second-year students have practical skills (record writing, formatting, typing, Python scripting) but have zero avenues to monetize them locally.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.15);">
+        <h3 style="color: #86efac; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.75rem;">💡 The Solution</h3>
+        <p style="color: #e2e8f0; font-size: 0.88rem; line-height: 1.6;">
+          A single, unified university ecosystem combining Student Portfolios, Skill Monetization, Explainable Compatibility Analysis, Campus Orders, and Opportunities specifically tailored for Malla Reddy Deemed to be University.
+        </p>
+      </div>
+
+      <div style="background: rgba(255,255,255,0.08); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.15);">
+        <h3 style="color: #cbd5e1; font-size: 1.2rem; font-weight: 800; margin-bottom: 0.75rem;">✨ The Unique Value</h3>
+        <p style="color: #e2e8f0; font-size: 0.88rem; line-height: 1.6;">
+          <strong style="color: #ffffff;">Explainable &amp; Transparent:</strong> Absolutely NO AI black-box job matching. Students see exactly which skills match and what to develop. Plus, immediate skill-to-earn monetization with verifiable demo earnings.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Announcements Ticker -->
+  {% if recent_announcements %}
+  <section style="margin: 3.5rem 0;">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem;">
+      <h3 style="font-size: 1.45rem; font-weight: 800; color: var(--text-heading-dark);">📢 MRDU Campus Announcements</h3>
+      <a href="{{ url_for('announcements') }}" class="btn btn-outline btn-sm">All Notices &rarr;</a>
+    </div>
+
+    <div class="grid-3">
+      {% for ann in recent_announcements %}
+        <div class="card" style="padding: 1.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span class="badge badge-info">{{ ann.category }}</span>
+            <small style="color: var(--text-subtle);">{{ ann.date }}</small>
+          </div>
+          <h4 style="font-size: 1.1rem; font-weight: 750; margin-bottom: 0.5rem; color: var(--text-heading-dark);">{{ ann.title }}</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5;">{{ ann.content[:110] }}...</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Future Scope Section -->
+  <section style="margin: 4.5rem 0; text-align: center;">
+    <span class="badge badge-primary">Roadmap</span>
+    <h2 style="font-size: 2.1rem; font-weight: 800; color: var(--text-heading-dark); margin: 0.5rem 0 1rem;">🔮 Future Scope &amp; Scalability</h2>
+    <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto 2rem;">
+      Planned progressive features for deployment across additional constituent colleges and universities:
+    </p>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; max-width: 900px; margin: 0 auto;">
+      <span class="skill-pill skill-pill-neutral">🏢 Verified Employer Badges</span>
+      <span class="skill-pill skill-pill-neutral">🎓 College Placement ERP Integration</span>
+      <span class="skill-pill skill-pill-neutral">📜 Blockchain Skill Certificates</span>
+      <span class="skill-pill skill-pill-neutral">💳 Production Payment Gateway (UPI / Cards)</span>
+      <span class="skill-pill skill-pill-neutral">📱 Flutter Mobile App for iOS &amp; Android</span>
+      <span class="skill-pill skill-pill-neutral">🌐 Multilingual Support (Telugu / Hindi / English)</span>
+      <span class="skill-pill skill-pill-neutral">🤝 Tier-1 IT Company MOUs</span>
+      <span class="skill-pill skill-pill-neutral">📈 Departmental Outcome-Based Analytics</span>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

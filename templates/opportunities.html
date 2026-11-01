@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Campus & National Opportunities - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-warning">Opportunities Hub</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🚀 Campus &amp; External Opportunities</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Discover hackathons, ideathons, coding competitions, workshops, and scholarships for MRDU students.
+      </p>
+    </div>
+
+    {% if current_user and current_user.role == 'admin' %}
+      <button class="btn btn-primary btn-sm" data-modal-target="createOppModal">+ Add Opportunity</button>
+    {% endif %}
+  </div>
+
+  <!-- Search & Category Filters -->
+  <form method="GET" action="{{ url_for('opportunities') }}" class="filter-bar">
+    <div class="filter-input">
+      <input type="text" name="q" class="form-control" placeholder="Search opportunities (Ideathon, Hackathon, AWS, Workshop)..." value="{{ search_query }}">
+    </div>
+
+    <div style="min-width: 200px;">
+      <select name="category" class="form-control">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.category }}" {% if selected_category == cat.category %}selected{% endif %}>{{ cat.category }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-sm" style="padding: 0.75rem 1.25rem;">Filter</button>
+    {% if search_query or selected_category %}
+      <a href="{{ url_for('opportunities') }}" class="btn btn-outline btn-sm">Reset</a>
+    {% endif %}
+  </form>
+
+  <!-- Opportunity Cards Grid -->
+  {% if opportunities %}
+    <div class="grid-2">
+      {% for opp in opportunities %}
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #f59e0b;">
+          <div>
+            <div class="card-header" style="margin-bottom: 0.75rem;">
+              <span class="badge badge-warning">{{ opp.category }}</span>
+              <small style="color: var(--text-subtle);">⏰ Deadline: {{ opp.deadline or 'TBD' }}</small>
+            </div>
+
+            <h3 style="font-size: 1.3rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.25rem;">{{ opp.title }}</h3>
+            <p style="color: var(--text-heading-medium); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">
+              🏛️ {{ opp.organization }}
+            </p>
+
+            <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1rem;">
+              {{ opp.description }}
+            </p>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-subtle); padding-top: 0.85rem; margin-top: auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div style="font-size: 0.82rem; color: var(--text-subtle);">
+              <span>📅 Date: {{ opp.date or 'TBA' }}</span> &bull; 
+              <span>📍 {{ opp.location }}</span>
+            </div>
+            {% if opp.link %}
+              <a href="{{ opp.link }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                Register / Details &rarr;
+              </a>
+            {% else %}
+              <span class="badge badge-neutral">Registration on Campus</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="text-align: center; padding: 3.5rem 2rem;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+      <h3 style="font-size: 1.4rem;">No opportunities matched your search</h3>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0.5rem auto 1.5rem;">
+        Check back soon or clear your category filter to see all active events.
+      </p>
+      <a href="{{ url_for('opportunities') }}" class="btn btn-outline btn-sm">Clear Filters</a>
+    </div>
+  {% endif %}
+
+  <!-- ADMIN ADD OPPORTUNITY MODAL -->
+  {% if current_user and current_user.role == 'admin' %}
+  <div id="createOppModal" class="modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px);">
+    <div class="card" style="width: 100%; max-width: 580px; padding: 2rem; position: relative;">
+      <h3 style="font-size: 1.45rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.5rem;">+ Add New Opportunity</h3>
+      
+      <form method="POST" action="{{ url_for('create_opportunity') }}">
+        <div class="form-group">
+          <label class="form-label">Opportunity Title *</label>
+          <input type="text" name="title" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select name="category" class="form-control">
+              <option value="Ideathon">Ideathon</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Competition">Competition</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Scholarship">Scholarship</option>
+              <option value="Career Event">Career Event</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Organization *</label>
+            <input type="text" name="organization" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="text" name="date" class="form-control" placeholder="e.g. 15 April 2026">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location *</label>
+            <input type="text" name="location" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Registration Deadline</label>
+            <input type="text" name="deadline" class="form-control" placeholder="e.g. 05 April 2026">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Registration Link</label>
+            <input type="url" name="link" class="form-control" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <textarea name="description" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem;">
+          <button type="button" class="btn btn-outline" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Opportunity &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

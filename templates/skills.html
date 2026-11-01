@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}My Skills - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem;">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <span class="badge badge-primary">Dedicated Skill Management</span>
+      <h1 style="font-size: 2.2rem; margin-top: 0.35rem;">🧑‍💻 My Skills</h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Add, categorize, and update your skill proficiencies. These skills power your <strong>Skill Compatibility Analysis</strong> and Marketplace services.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 0.75rem;">
+      <a href="{{ url_for('skill_analysis') }}" class="btn btn-outline-primary btn-sm">📊 View Skill Analysis</a>
+      <a href="{{ url_for('create_service') }}" class="btn btn-secondary btn-sm">💰 Monetize a Skill</a>
+    </div>
+  </div>
+
+  <div class="grid-3" style="align-items: flex-start;">
+    
+    <!-- Add Skill Form Card -->
+    <div class="card" style="border-color: rgba(99,102,241,0.35);">
+      <h3 class="card-title" style="margin-bottom: 0.5rem;">+ Add New Skill</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        Self-report your verified competence level.
+      </p>
+
+      <form method="POST" action="{{ url_for('add_skill') }}">
+        <div class="form-group">
+          <label class="form-label" for="skill_name">Skill Name *</label>
+          <input type="text" id="skill_name" name="name" class="form-control" placeholder="e.g. Python, Typing, Record Writing" required list="commonSkills">
+          <datalist id="commonSkills">
+            <option value="Python">
+            <option value="C">
+            <option value="Java">
+            <option value="HTML">
+            <option value="CSS">
+            <option value="JavaScript">
+            <option value="SQL">
+            <option value="Flask">
+            <option value="Typing">
+            <option value="Data Entry">
+            <option value="MS Word">
+            <option value="PowerPoint">
+            <option value="Document Formatting">
+            <option value="Record Writing">
+            <option value="Graphic Design">
+            <option value="Communication">
+            <option value="Teamwork">
+            <option value="Leadership">
+            <option value="Presentation">
+            <option value="Problem Solving">
+            <option value="Time Management">
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select id="category" name="category" class="form-control">
+            <option value="Technical">Technical Skills (Coding &amp; Software)</option>
+            <option value="Digital">Digital &amp; Academic Skills (Typing, MS Office, Records)</option>
+            <option value="Soft">Soft Skills (Communication, Teamwork, Leadership)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="level">Skill Level *</label>
+          <select id="level" name="level" class="form-control">
+            <option value="Beginner">Beginner (Foundation - 40%)</option>
+            <option value="Intermediate" selected>Intermediate (Competent - 70%)</option>
+            <option value="Advanced">Advanced (Proficient - 90%)</option>
+          </select>
+          <small style="color: var(--text-subtle); display: block; margin-top: 4px;">* Self-reported skill assessment</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          Add to Profile &rarr;
+        </button>
+      </form>
+    </div>
+
+    <!-- Active Skills Display (2 Columns) -->
+    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Technical Skills Section -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">💻 Technical Skills ({{ tech_skills|length }})</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">Programming languages, frameworks, databases, and engineering tools</p>
+          </div>
+          <span class="badge badge-primary">Technical</span>
+        </div>
+
+        {% if tech_skills %}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem;">
+            {% for s in tech_skills %}
+              <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 750; color: var(--text-heading-dark); font-size: 0.95rem;">{{ s.name }}</div>
+                  <span class="badge {% if s.level == 'Advanced' %}badge-success{% elif s.level == 'Intermediate' %}badge-primary{% else %}badge-neutral{% endif %}">
+                    {{ s.level }}
+                  </span>
+                </div>
+                <form method="POST" action="{{ url_for('delete_skill', skill_id=s.id) }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem; color: #dc2626; border-color: rgba(220,38,38,0.3);" onclick="return confirm('Remove skill {{ s.name }}?');">
+                    ✕
+                  </button>
+                </form>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-subtle); font-size: 0.88rem;">No technical skills added yet. Add Python, SQL, or HTML above!</p>
+        {% endif %}
+      </div>
+
+      <!-- Digital & Academic Skills Section -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">✍️ Digital &amp; Academic Skills ({{ digital_skills|length }})</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">Typing, Record Writing, Document Formatting, Excel, and Presentation Design</p>
+          </div>
+          <span class="badge badge-success">Digital</span>
+        </div>
+
+        {% if digital_skills %}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem;">
+            {% for s in digital_skills %}
+              <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 750; color: var(--text-heading-dark); font-size: 0.95rem;">{{ s.name }}</div>
+                  <span class="badge {% if s.level == 'Advanced' %}badge-success{% elif s.level == 'Intermediate' %}badge-primary{% else %}badge-neutral{% endif %}">
+                    {{ s.level }}
+                  </span>
+                </div>
+                <form method="POST" action="{{ url_for('delete_skill', skill_id=s.id) }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem; color: #dc2626; border-color: rgba(220,38,38,0.3);" onclick="return confirm('Remove skill {{ s.name }}?');">
+                    ✕
+                  </button>
+                </form>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-subtle); font-size: 0.88rem;">No digital skills added yet. Add Typing or Record Writing to offer campus services!</p>
+        {% endif %}
+      </div>
+
+      <!-- Soft Skills Section -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 class="card-title">🗣️ Soft &amp; Leadership Skills ({{ soft_skills|length }})</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">Communication, Teamwork, Presentation, Time Management</p>
+          </div>
+          <span class="badge badge-warning">Soft</span>
+        </div>
+
+        {% if soft_skills %}
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem;">
+            {% for s in soft_skills %}
+              <div style="background: var(--bg-inner); border: 1px solid var(--border-subtle); padding: 0.85rem; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-weight: 750; color: var(--text-heading-dark); font-size: 0.95rem;">{{ s.name }}</div>
+                  <span class="badge {% if s.level == 'Advanced' %}badge-success{% elif s.level == 'Intermediate' %}badge-primary{% else %}badge-neutral{% endif %}">
+                    {{ s.level }}
+                  </span>
+                </div>
+                <form method="POST" action="{{ url_for('delete_skill', skill_id=s.id) }}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm" style="padding: 2px 8px; font-size: 0.75rem; color: #f87171; border-color: rgba(248,113,113,0.3);" onclick="return confirm('Remove skill {{ s.name }}?');">
+                    ✕
+                  </button>
+                </form>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p style="color: var(--text-subtle); font-size: 0.88rem;">No soft skills added yet. Add Communication or Teamwork!</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}{{ internship.title }} - Internship Details | MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 960px; padding-top: 1.5rem;">
+
+  <div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('internships') }}" class="btn btn-outline btn-sm">&larr; Back to Internships</a>
+  </div>
+
+  <div class="card" style="padding: 2.5rem 2rem; margin-bottom: 2rem;">
+    <!-- Internship Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1.75rem;">
+      <div>
+        <span class="badge badge-info">{{ internship.duration }}</span>
+        <h1 style="font-size: 2.4rem; margin-top: 0.4rem; color: var(--text-heading-dark); font-weight: 800;">{{ internship.title }}</h1>
+        <p style="color: var(--text-heading-medium); font-size: 1.15rem; font-weight: 700; margin-top: 2px;">
+          🏢 {{ internship.company_name }}
+        </p>
+        <div style="display: flex; gap: 1rem; margin-top: 0.75rem; flex-wrap: wrap; font-size: 0.88rem; color: var(--text-muted);">
+          <span>📍 {{ internship.location }}</span>
+          <span>⏱️ {{ internship.duration }}</span>
+          <span>⏰ Deadline: {{ internship.deadline or 'Open' }}</span>
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <div style="font-size: 1.65rem; font-weight: 800; color: var(--mrdu-green-dark); font-family: var(--font-heading);">
+          {{ internship.stipend }}
+        </div>
+        <small style="color: var(--text-subtle);">Monthly Stipend</small>
+
+        <div style="margin-top: 1rem;">
+          {% if already_applied %}
+            <span class="badge badge-success" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+              ✅ Applied (Status: {{ application.status }})
+            </span>
+          {% elif current_user and current_user.role == 'student' %}
+            <button class="btn btn-secondary" data-modal-target="applyInternshipModal">
+              Apply for Internship &rarr;
+            </button>
+          {% elif not current_user %}
+            <a href="{{ url_for('login', next=request.url) }}" class="btn btn-primary btn-sm">
+              Log in to Apply
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Skill Compatibility Analysis (NO AI) -->
+    {% if current_user and current_user.role == 'student' and skill_compat %}
+      <div class="compat-box" style="margin: 2rem 0; border: 1px solid rgba(56,189,248,0.35); background: linear-gradient(135deg, rgba(56,189,248,0.08) 0%, rgba(17,24,39,0.95) 100%);">
+        <div class="compat-header">
+          <div>
+            <span class="badge badge-demo">Transparent Python Logic &bull; NO AI</span>
+            <div class="compat-title" style="margin-top: 4px; font-size: 1.15rem;">
+              🎯 Skill Compatibility Analysis
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 2px;">
+              Direct comparison between your profile skills and the required internship tools:
+            </p>
+          </div>
+          <div>
+            <span class="compat-score-pill {% if skill_compat.percentage >= 70 %}compat-high{% elif skill_compat.percentage >= 40 %}compat-mid{% else %}compat-low{% endif %}">
+              {{ skill_compat.percentage }}% Skill Compatibility
+            </span>
+          </div>
+        </div>
+
+        <div class="progress-bar-container" style="height: 10px; margin: 0.75rem 0 1.25rem;">
+          <div class="progress-bar-fill {% if skill_compat.percentage >= 70 %}progress-bar-emerald{% endif %}" style="width: {{ skill_compat.percentage }}%;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1rem;">
+          <!-- Matched Skills -->
+          <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.25); padding: 1rem; border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: #34d399; font-size: 0.9rem; margin-bottom: 0.5rem;">
+              ✔ Matched Skills ({{ skill_compat.matched|length }})
+            </div>
+            {% if skill_compat.matched %}
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                {% for m in skill_compat.matched %}
+                  <span class="skill-pill skill-pill-matched">✔ {{ m }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <small style="color: var(--text-subtle);">None of your currently saved skills matched.</small>
+            {% endif %}
+          </div>
+
+          <!-- Skills to Develop -->
+          <div style="background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.25); padding: 1rem; border-radius: var(--radius-sm);">
+            <div style="font-weight: 700; color: #fbbf24; font-size: 0.9rem; margin-bottom: 0.5rem;">
+              ⚠ Skills to Develop ({{ skill_compat.missing|length }})
+            </div>
+            {% if skill_compat.missing %}
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                {% for mis in skill_compat.missing %}
+                  <span class="skill-pill skill-pill-missing">⚠ {{ mis }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              <small style="color: #34d399;">100% matched!</small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Internship Details -->
+    <div style="display: flex; flex-direction: column; gap: 1.75rem; margin-top: 1.5rem;">
+      <div>
+        <h3 style="font-size: 1.25rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.5rem;">📄 Internship Scope &amp; Learning Outcomes</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; white-space: pre-line;">{{ internship.description }}</p>
+      </div>
+
+      {% if internship.eligibility %}
+      <div>
+        <h3 style="font-size: 1.25rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.5rem;">🎓 Candidate Eligibility</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">{{ internship.eligibility }}</p>
+      </div>
+      {% endif %}
+
+      <div>
+        <h3 style="font-size: 1.25rem; color: var(--text-heading-dark); font-weight: 750; margin-bottom: 0.5rem;">⚡ Skills Evaluated</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          {% for skill in internship.skills.split(',') %}
+            <span class="skill-pill skill-pill-neutral" style="font-size: 0.85rem; padding: 0.4rem 0.85rem;">
+              ⚡ {{ skill.strip() }}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION MODAL -->
+  <div id="applyInternshipModal" class="modal-backdrop" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(6px);">
+    <div class="card" style="width: 100%; max-width: 540px; padding: 2rem; position: relative;">
+      <h3 style="font-size: 1.45rem; color: var(--text-heading-dark); font-weight: 800; margin-bottom: 0.5rem;">Apply for {{ internship.title }}</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        Your verified student profile and academic details will be attached.
+      </p>
+
+      <form method="POST" action="{{ url_for('apply_internship', internship_id=internship.id) }}">
+        <div class="form-group">
+          <label class="form-label" for="cover_note">Why are you interested in this internship?</label>
+          <textarea id="cover_note" name="cover_note" class="form-control" rows="4" placeholder="Mention your coursework, relevant projects, or enthusiasm..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-secondary">Submit Application &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

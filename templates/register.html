@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 580px; padding-top: 2rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <div class="brand-icon-box" style="margin: 0 auto 1rem; width: 50px; height: 50px; font-size: 1.3rem;">MR</div>
+      <h2 style="font-size: 1.8rem; margin-bottom: 0.35rem;">Join MR EARN &amp; CONNECT</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Start exploring jobs, offering skills, and building your career</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('register') }}">
+      
+      <!-- Role Selection -->
+      <div class="form-group">
+        <label class="form-label">I am joining as:</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+          <label class="card" style="padding: 0.75rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);" id="roleStudentLabel">
+            <input type="radio" name="role" value="student" checked style="display: none;" id="roleStudent">
+            <div style="font-size: 1.3rem; margin-bottom: 0.25rem;">👨‍🎓</div>
+            <div style="font-weight: 700; font-size: 0.85rem;">Student</div>
+          </label>
+
+          <label class="card" style="padding: 0.75rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);" id="roleEmployerLabel">
+            <input type="radio" name="role" value="employer" style="display: none;" id="roleEmployer">
+            <div style="font-size: 1.3rem; margin-bottom: 0.25rem;">🏢</div>
+            <div style="font-weight: 700; font-size: 0.85rem;">Employer</div>
+          </label>
+
+          <label class="card" style="padding: 0.75rem; text-align: center; cursor: pointer; border: 1px solid var(--border-subtle);" id="roleCustomerLabel">
+            <input type="radio" name="role" value="customer" style="display: none;" id="roleCustomer">
+            <div style="font-size: 1.3rem; margin-bottom: 0.25rem;">👤</div>
+            <div style="font-weight: 700; font-size: 0.85rem;">Customer</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="name">Full Name *</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Arjun Kumar" required>
+      </div>
+
+      <!-- Optional Company Name for Employers -->
+      <div class="form-group" id="companyField" style="display: none;">
+        <label class="form-label" for="company_name">Company / Organization Name *</label>
+        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="e.g. NexaAI Labs">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address *</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="e.g. student@mrdu.edu" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" class="form-control" placeholder="e.g. +91 9876543210">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password *</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Create a strong password (min 6 chars)" required minlength="6">
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 0.85rem;">
+        Complete Registration &rarr;
+      </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle); font-size: 0.88rem; color: var(--text-muted);">
+      Already have an account? 
+      <a href="{{ url_for('login') }}" style="color: var(--mrdu-green-dark); font-weight: 700;">Sign in here</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Dynamic role highlight and company name toggle
+  const studentRadio = document.getElementById('roleStudent');
+  const employerRadio = document.getElementById('roleEmployer');
+  const customerRadio = document.getElementById('roleCustomer');
+
+  const studentLabel = document.getElementById('roleStudentLabel');
+  const employerLabel = document.getElementById('roleEmployerLabel');
+  const customerLabel = document.getElementById('roleCustomerLabel');
+  const companyField = document.getElementById('companyField');
+
+  function updateRoleUI() {
+    [studentLabel, employerLabel, customerLabel].forEach(l => {
+      l.style.borderColor = 'var(--border-subtle)';
+      l.style.background = 'var(--bg-card)';
+    });
+
+    if (studentRadio.checked) {
+      studentLabel.style.borderColor = 'var(--primary)';
+      studentLabel.style.background = 'rgba(99,102,241,0.15)';
+      companyField.style.display = 'none';
+    } else if (employerRadio.checked) {
+      employerLabel.style.borderColor = '#38bdf8';
+      employerLabel.style.background = 'rgba(56,189,248,0.15)';
+      companyField.style.display = 'block';
+    } else if (customerRadio.checked) {
+      customerLabel.style.borderColor = '#10b981';
+      customerLabel.style.background = 'rgba(16,185,129,0.15)';
+      companyField.style.display = 'none';
+    }
+  }
+
+  [studentRadio, employerRadio, customerRadio].forEach(r => {
+    r.addEventListener('change', updateRoleUI);
+  });
+  updateRoleUI();
+</script>
+{% endblock %}

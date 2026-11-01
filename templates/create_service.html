@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Create Service - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 780px; padding-top: 1.5rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div>
+        <h2 style="font-size: 1.8rem;">💰 Offer a Skill to Earn</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Turn your record writing, typing, design, or coding skills into campus earnings</p>
+      </div>
+      <a href="{{ url_for('services') }}" class="btn btn-outline btn-sm">&larr; Marketplace</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('create_service') }}">
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Service Title *</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Record Writing & Document Formatting" required>
+        <small style="color: var(--text-subtle);">Examples: Record Writing, Notes Prep, PPT Design, Fast Typing, Basic Python Scripting.</small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <select id="category" name="category" class="form-control">
+            <option value="Academic & Writing" selected>Academic &amp; Writing</option>
+            <option value="Data & Office">Data &amp; Office</option>
+            <option value="Design & Media">Design &amp; Media</option>
+            <option value="Software & Web">Software &amp; Web</option>
+            <option value="Tutoring & Mentorship">Tutoring &amp; Mentorship</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="price">Price (in ₹ INR) *</label>
+          <input type="number" step="10" min="50" id="price" name="price" class="form-control" placeholder="e.g. 500" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="delivery_time">Estimated Delivery Time *</label>
+          <input type="text" id="delivery_time" name="delivery_time" class="form-control" placeholder="e.g. 2 Days, 24 Hours" value="2 Days" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="availability">Current Availability *</label>
+          <select id="availability" name="availability" class="form-control">
+            <option value="Available" selected>Available (Taking Orders)</option>
+            <option value="Busy">Busy (Limited Slots)</option>
+            <option value="Unavailable">Unavailable</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="skills">Skills Applied (Comma-separated) *</label>
+        <input type="text" id="skills" name="skills" class="form-control" placeholder="e.g. Typing, MS Word, Formatting, Record Writing" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Detailed Service Description *</label>
+        <textarea id="description" name="description" class="form-control" rows="4" placeholder="Describe exactly what deliverables you provide (e.g. page counts, neat handwriting, error checks, formatting styles)..." required></textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-secondary" style="flex: 1;">Publish Service Listing &rarr;</button>
+        <a href="{{ url_for('services') }}" class="btn btn-outline">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}

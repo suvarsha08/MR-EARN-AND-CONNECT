@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Job - MR EARN & CONNECT{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 780px; padding-top: 1.5rem;">
+  
+  <div class="card" style="padding: 2.5rem 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem;">
+      <div>
+        <h2 style="font-size: 1.8rem;">✏️ Edit Job Posting</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Modify job description, required skills, or compensation</p>
+      </div>
+      <a href="{{ url_for('job_details', job_id=job.id) }}" class="btn btn-outline btn-sm">&larr; View Job</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('edit_job', job_id=job.id) }}">
+      
+      <div class="form-group">
+        <label class="form-label" for="title">Job Title *</label>
+        <input type="text" id="title" name="title" class="form-control" value="{{ job.title }}" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="category">Category *</label>
+          <input type="text" id="category" name="category" class="form-control" value="{{ job.category }}" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="job_type">Job Type *</label>
+          <select id="job_type" name="job_type" class="form-control">
+            <option value="Full-time" {% if job.job_type == 'Full-time' %}selected{% endif %}>Full-time</option>
+            <option value="Part-time" {% if job.job_type == 'Part-time' %}selected{% endif %}>Part-time</option>
+            <option value="Remote" {% if job.job_type == 'Remote' %}selected{% endif %}>Remote</option>
+            <option value="Hybrid" {% if job.job_type == 'Hybrid' %}selected{% endif %}>Hybrid</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label class="form-label" for="salary">Salary / Package *</label>
+          <input type="text" id="salary" name="salary" class="form-control" value="{{ job.salary }}" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">Location *</label>
+          <input type="text" id="location" name="location" class="form-control" value="{{ job.location }}" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="skills">Required Skills (Comma-separated) *</label>
+        <input type="text" id="skills" name="skills" class="form-control" value="{{ job.skills }}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="qualification">Eligibility &amp; Qualification</label>
+        <input type="text" id="qualification" name="qualification" class="form-control" value="{{ job.qualification or '' }}">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="description">Job Description *</label>
+        <textarea id="description" name="description" class="form-control" rows="4" required>{{ job.description }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="responsibilities">Responsibilities (Semicolon-separated)</label>
+        <textarea id="responsibilities" name="responsibilities" class="form-control" rows="3">{{ job.responsibilities or '' }}</textarea>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-primary" style="flex: 1;">Save Changes &rarr;</button>
+        <a href="{{ url_for('job_details', job_id=job.id) }}" class="btn btn-outline">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+{% endblock %}
